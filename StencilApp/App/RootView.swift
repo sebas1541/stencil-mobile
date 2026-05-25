@@ -51,6 +51,19 @@ struct RootView: View {
                 selectedSection = .generate
             }
         }
+#if DEBUG
+        .onReceive(NotificationCenter.default.publisher(for: .stencilInjectMock)) { _ in
+            editorViewModel.injectMockResult()
+            // Apply --section=… launch arg if present.
+            let args = ProcessInfo.processInfo.arguments
+            if let idx = args.firstIndex(where: { $0.hasPrefix("--section=") }) {
+                let raw = String(args[idx].dropFirst("--section=".count))
+                if let section = AppSection(rawValue: raw) {
+                    selectedSection = section
+                }
+            }
+        }
+#endif
     }
 
     // MARK: - Content router

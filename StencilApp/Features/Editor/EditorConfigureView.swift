@@ -137,97 +137,143 @@ struct EditorConfigureView: View {
     }
 
     // MARK: - Prompt controls
+    //
+    // Four small cards instead of one big nested one. Each card carries a
+    // single logical control so the visual hierarchy stops feeling muddled.
 
     private var promptControlsSection: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             SectionLabel(text: "Prompt controls")
-            VStack(alignment: .leading, spacing: Spacing.md) {
-                Toggle(isOn: $viewModel.parameters.promptConfig.uiBackground) {
-                    VStack(alignment: .leading) {
-                        Text("Preserve background")
-                            .font(AppFont.bodyEmphasis)
-                        Text("Off replaces the background with pure white.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+            VStack(spacing: Spacing.sm) {
+                backgroundCard
+                thicknessCard
+                shadowsCard
+                textureCard
+            }
+            .animation(.snappy, value: viewModel.parameters.promptConfig.uiShadowsEnabled)
+        }
+    }
+
+    private var backgroundCard: some View {
+        HStack(alignment: .center, spacing: Spacing.md) {
+            iconBadge(systemName: "rectangle.dashed")
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Preserve background")
+                    .font(AppFont.bodyEmphasis)
+                Text("Off replaces it with pure white.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Toggle("", isOn: $viewModel.parameters.promptConfig.uiBackground)
+                .labelsHidden()
                 .tint(AppColor.accent)
+        }
+        .padding(Spacing.md)
+        .liquidGlassCard(cornerRadius: Radius.md)
+    }
 
-                Divider()
-
-                VStack(alignment: .leading, spacing: Spacing.sm) {
-                    Text("Main contour thickness")
-                        .font(AppFont.bodyEmphasis)
-                    Picker("Thickness", selection: $viewModel.parameters.promptConfig.uiThickness) {
-                        ForEach(Thickness.allCases) { value in
-                            Text(value.rawValue).tag(value.rawValue)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+    private var thicknessCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(spacing: Spacing.sm) {
+                iconBadge(systemName: "lineweight")
+                Text("Main contour thickness")
+                    .font(AppFont.bodyEmphasis)
+                Spacer()
+            }
+            Picker("Thickness", selection: $viewModel.parameters.promptConfig.uiThickness) {
+                ForEach(Thickness.allCases) { value in
+                    Text(value.rawValue).tag(value.rawValue)
                 }
+            }
+            .pickerStyle(.segmented)
+        }
+        .padding(Spacing.md)
+        .liquidGlassCard(cornerRadius: Radius.md)
+    }
 
-                Divider()
-
-                Toggle(isOn: Binding(
+    @ViewBuilder
+    private var shadowsCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(alignment: .center, spacing: Spacing.md) {
+                iconBadge(systemName: "mountain.2")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Topographic value contours")
+                        .font(AppFont.bodyEmphasis)
+                    Text("Broken guide lines marking tonal zones.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Toggle("", isOn: Binding(
                     get: { viewModel.parameters.promptConfig.uiShadowsEnabled },
                     set: { newValue in
                         viewModel.parameters.promptConfig.uiShadowsEnabled = newValue
                         viewModel.onShadowsToggleChanged(enabled: newValue)
                     }
-                )) {
-                    VStack(alignment: .leading) {
-                        Text("Topographic value contours")
-                            .font(AppFont.bodyEmphasis)
-                        Text("Adds broken guide lines marking tonal-zone boundaries.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
+                ))
+                .labelsHidden()
                 .tint(AppColor.accent)
+            }
 
-                if viewModel.parameters.promptConfig.uiShadowsEnabled {
-                    VStack(alignment: .leading, spacing: Spacing.sm) {
-                        Text("Detail")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Picker("Detail", selection: $viewModel.parameters.promptConfig.uiShadowDetail) {
-                            ForEach(ShadowDetail.allCases) { value in
-                                Text(value.rawValue).tag(value.rawValue)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-
-                        Text("Weight")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Picker("Weight", selection: $viewModel.parameters.promptConfig.uiShadowWeight) {
-                            ForEach(ShadowWeight.allCases) { value in
-                                Text(value.rawValue).tag(value.rawValue)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    .padding(.leading, Spacing.md)
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-
-                Divider()
-
+            if viewModel.parameters.promptConfig.uiShadowsEnabled {
                 VStack(alignment: .leading, spacing: Spacing.sm) {
-                    Text("Texture filtering")
-                        .font(AppFont.bodyEmphasis)
-                    Picker("Texture", selection: $viewModel.parameters.promptConfig.uiTextureLevel) {
-                        ForEach(TextureLevel.allCases) { value in
+                    Text("Detail")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    Picker("Detail", selection: $viewModel.parameters.promptConfig.uiShadowDetail) {
+                        ForEach(ShadowDetail.allCases) { value in
+                            Text(value.rawValue).tag(value.rawValue)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Text("Weight")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 2)
+                    Picker("Weight", selection: $viewModel.parameters.promptConfig.uiShadowWeight) {
+                        ForEach(ShadowWeight.allCases) { value in
                             Text(value.rawValue).tag(value.rawValue)
                         }
                     }
                     .pickerStyle(.segmented)
                 }
+                .padding(.top, Spacing.xs)
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
-            .padding(Spacing.lg)
-            .liquidGlassCard()
-            .animation(.snappy, value: viewModel.parameters.promptConfig.uiShadowsEnabled)
         }
+        .padding(Spacing.md)
+        .liquidGlassCard(cornerRadius: Radius.md)
+    }
+
+    private var textureCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            HStack(spacing: Spacing.sm) {
+                iconBadge(systemName: "circle.grid.cross")
+                Text("Texture filtering")
+                    .font(AppFont.bodyEmphasis)
+                Spacer()
+            }
+            Picker("Texture", selection: $viewModel.parameters.promptConfig.uiTextureLevel) {
+                ForEach(TextureLevel.allCases) { value in
+                    Text(value.rawValue).tag(value.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+        }
+        .padding(Spacing.md)
+        .liquidGlassCard(cornerRadius: Radius.md)
+    }
+
+    private func iconBadge(systemName: String) -> some View {
+        Image(systemName: systemName)
+            .font(.callout)
+            .foregroundStyle(AppColor.accent)
+            .frame(width: 28, height: 28)
+            .background {
+                Circle().fill(AppColor.accent.opacity(0.12))
+            }
     }
 
     // MARK: - Generate buttons
@@ -244,6 +290,16 @@ struct EditorConfigureView: View {
             .keyboardShortcut("g", modifiers: [.command])
             .liquidGlassButton(.prominent)
             .disabled(!viewModel.canGenerate)
+#if DEBUG
+            // Long-press shortcut: skip the network and inject a mock result
+            // so the rest of the UI is reachable in the simulator without
+            // running the FastAPI microservice.
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 0.6).onEnded { _ in
+                    viewModel.injectMockResult()
+                }
+            )
+#endif
 
             Button {
                 viewModel.generate(promptMode: .technical_trace)

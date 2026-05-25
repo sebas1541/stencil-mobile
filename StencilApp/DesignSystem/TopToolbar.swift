@@ -32,6 +32,9 @@ struct TopToolbar: View {
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, Spacing.sm)
         .liquidGlassCard(cornerRadius: Radius.lg)
+        // Subtle elevation so the bar reads as "above the content layer"
+        // even when the underlying canvas is the same hue.
+        .shadow(color: Color.black.opacity(0.06), radius: 14, x: 0, y: 4)
     }
 
     // MARK: - Regular (iPad / unsplit)
@@ -120,18 +123,47 @@ struct TopToolbar: View {
         }
     }
 
+    /// Custom segmented picker built from glass chips so we get a clearly
+    /// visible "selected" state instead of the very subtle default segmented
+    /// control. Matches Calendar's Day/Week/Month/Year vibe more closely.
     private var sectionPicker: some View {
-        Picker("Section", selection: $selectedSection) {
+        HStack(spacing: 4) {
             ForEach(AppSection.allCases) { section in
-                Text(section.displayName)
-                    .tag(section)
+                Button {
+                    withAnimation(.snappy(duration: 0.18)) {
+                        selectedSection = section
+                    }
+                } label: {
+                    Text(section.displayName)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(
+                            selectedSection == section ? AnyShapeStyle(.white) : AnyShapeStyle(.primary)
+                        )
+                        .padding(.horizontal, Spacing.md)
+                        .padding(.vertical, 6)
+                        .background {
+                            if selectedSection == section {
+                                Capsule(style: .continuous)
+                                    .fill(AppColor.accent)
+                                    .shadow(color: AppColor.accent.opacity(0.35), radius: 6, x: 0, y: 2)
+                            } else {
+                                Capsule(style: .continuous)
+                                    .fill(Color.clear)
+                            }
+                        }
+                }
+                .buttonStyle(.plain)
             }
         }
-        .pickerStyle(.segmented)
-        .disabled(false)
-        // We don't disable individual segments — Picker can't do per-tag
-        // disabled. Instead RootView snaps back to .generate when the user
-        // lands on a result-only section without a result.
+        .padding(4)
+        .background {
+            Capsule(style: .continuous)
+                .fill(.thinMaterial)
+                .overlay(
+                    Capsule(style: .continuous)
+                        .strokeBorder(AppColor.borderSubtle, lineWidth: 0.5)
+                )
+        }
     }
 
     private var rightGroup: some View {

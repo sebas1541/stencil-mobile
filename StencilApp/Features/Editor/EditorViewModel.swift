@@ -172,4 +172,81 @@ final class EditorViewModel {
         parameters.requestId = UUID()
         phase = .configure
     }
+
+#if DEBUG
+    /// DEBUG-only: skip the real network round trip and pretend the API
+    /// returned a stencil. Uses the loaded photo if available; otherwise
+    /// generates a procedural placeholder so the rest of the UI is reachable
+    /// in the simulator without spinning up the microservice or even picking
+    /// a photo first.
+    ///
+    /// Wire it up via a long-press on the Generate button.
+    func injectMockResult() {
+        let image = sourceImage ?? Self.placeholderImage()
+
+        let requestId = UUID()
+        let usage = UsageRecord(
+            requestId: requestId.uuidString,
+            tier: parameters.tier.rawValue,
+            geminiCalls: parameters.tier.isLocal ? 1 : 2,
+            inputMpx: Double((image.size.width * image.size.height) / 1_000_000),
+            outputResolution: parameters.resolution.rawValue,
+            processingTimeMs: 1234,
+            success: true,
+            resolutionWarning: false
+        )
+        let response = StencilResponse(
+            stencilUrl: "about:blank",
+            previewUrl: "about:blank",
+            formato: "PNG",
+            contentType: "portrait",
+            contentConfidence: 0.93,
+            usage: usage
+        )
+
+        // Adopt sourceImage if missing, so Refine has *something* to compare.
+        if sourceImage == nil { sourceImage = image }
+
+        let retouch = RetouchViewModel(referenceImage: image)
+        retouch.adoptStencil(image)
+        self.retouchViewModel = retouch
+        history.record(parameters: parameters, response: response)
+        phase = .result(response, sourcePreview: image)
+    }
+
+    /// Procedural mid-grey image with a simple radial pattern so the user can
+    /// at least see the comparison + annotation surfaces working.
+    private static func placeholderImage(size: CGSize = CGSize(width: 1024, height: 1024)) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { context in
+            // Background gradient — slate to white.
+            let colors = [
+                UIColor(white: 0.92, alpha: 1).cgColor,
+                UIColor(white: 0.78, alpha: 1).cgColor
+            ]
+            let space = CGColorSpaceCreateDeviceRGB()
+            if let gradient = CGGradient(colorsSpace: space, colors: colors as CFArray, locations: [0, 1]) {
+                context.cgContext.drawLinearGradient(
+                    gradient,
+                    start: .zero,
+                    end: CGPoint(x: size.width, y: size.height),
+                    options: []
+                )
+            }
+            // Big offset circle so retouching/threshold/dilation actually have
+            // an edge to chew on.
+            UIColor.black.setStroke()
+            context.cgContext.setLineWidth(8)
+            let inset = size.width * 0.18
+            context.cgContext.strokeEllipse(in: CGRect(x: inset, y: inset,
+                                                      width: size.width - inset * 2,
+                                                      height: size.height - inset * 2))
+            context.cgContext.setLineWidth(3)
+            context.cgContext.strokeEllipse(in: CGRect(x: size.width * 0.35,
+                                                      y: size.height * 0.35,
+                                                      width: size.width * 0.3,
+                                                      height: size.height * 0.3))
+        }
+    }
+#endif
 }
