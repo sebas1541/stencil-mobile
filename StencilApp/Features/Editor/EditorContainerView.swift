@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// Top-level container for the editor flow. Owns the view model and switches
-/// between the configure form, the generating spinner, and the result panel.
+/// Top-level container for the editor flow. The view model is owned by the
+/// `RootView` so a history-tap from the sidebar can mutate the form before
+/// this view re-appears.
 struct EditorContainerView: View {
-    @State private var viewModel = EditorViewModel()
+    @Bindable var viewModel: EditorViewModel
 
     var body: some View {
         NavigationStack {

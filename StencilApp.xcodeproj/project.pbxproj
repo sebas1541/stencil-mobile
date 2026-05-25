@@ -19,6 +19,7 @@
 		392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA6147DB48E5105E768685 /* StencilApp.swift */; };
 		40017ACDDB15867B840882D6 /* ExportPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C114628842C93253ADCED5D1 /* ExportPanel.swift */; };
 		506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6584295EA58EC9F710A918D5 /* LiquidGlass.swift */; };
+		549F6F232C5C6299528F073C /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59882D59670F94468F4BAE6 /* HistoryStore.swift */; };
 		586C3C53F0E6EBF55C30ECFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */; };
 		599FE748A8B890768D13F772 /* RetouchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906FBC7690ED1528B734D286 /* RetouchEngine.swift */; };
 		679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FFC516AFD5A75C384F8E91 /* StencilService.swift */; };
@@ -62,6 +63,7 @@
 		D96A757558667EE12D72A1BF /* StencilApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = StencilApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB23F44F6280A760D826D4EA /* PhotoSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
 		E8CFC722DC78B1C6C95FEAD4 /* OverlayCompositor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayCompositor.swift; sourceTree = "<group>"; };
+		F59882D59670F94468F4BAE6 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
 		F6894C539238E6369EDDA2EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F92A57A0E4BD698140422353 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				7A70ACF4922A957084C16C93 /* APIClient.swift */,
+				F59882D59670F94468F4BAE6 /* HistoryStore.swift */,
 				E8CFC722DC78B1C6C95FEAD4 /* OverlayCompositor.swift */,
 				DB23F44F6280A760D826D4EA /* PhotoSaver.swift */,
 				01CAB6DBBFFFE041BA7B62FB /* ProcreateExporter.swift */,
@@ -274,6 +277,7 @@
 				373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */,
 				40017ACDDB15867B840882D6 /* ExportPanel.swift in Sources */,
 				8DF68D71318DD972B6DE384A /* GlassImagePreview.swift in Sources */,
+				549F6F232C5C6299528F073C /* HistoryStore.swift in Sources */,
 				1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */,
 				506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */,
 				0BD324D3C5DC7C719DCDEF5D /* Models.swift in Sources */,

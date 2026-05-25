@@ -31,9 +31,32 @@ final class EditorViewModel {
 
     // Services
     private let service: StencilService
+    private let history: HistoryStore
 
-    init(service: StencilService = StencilService()) {
+    init(
+        service: StencilService = StencilService(),
+        history: HistoryStore? = nil
+    ) {
         self.service = service
+        // Defer `.shared` access to the init body so the default-value
+        // expression isn't evaluated outside the MainActor.
+        self.history = history ?? HistoryStore.shared
+    }
+
+    /// Repopulate the form with a recent entry — keeps the currently-loaded
+    /// source image (or none) so the user can re-run with a fresh photo.
+    func apply(history entry: GenerationHistoryEntry) {
+        parameters = StencilParameters(
+            requestId:    UUID(),
+            estilo:       entry.estilo,
+            grosorLinea:  parameters.grosorLinea,
+            contraste:    parameters.contraste,
+            tier:         entry.tier,
+            resolution:   entry.resolution,
+            promptMode:   entry.promptMode,
+            promptConfig: entry.promptConfig
+        )
+        phase = .configure
     }
 
     // MARK: - Derived
@@ -110,7 +133,7 @@ final class EditorViewModel {
         let filename = sourceFilename ?? "reference.jpg"
         let parameters = self.parameters
 
-        Task { [service] in
+        Task { [service, history] in
             do {
                 let response = try await service.generate(
                     imageData: data,
@@ -118,6 +141,7 @@ final class EditorViewModel {
                     params: parameters
                 )
                 await MainActor.run {
+                    history.record(parameters: parameters, response: response)
                     self.phase = .result(response, sourcePreview: image)
                 }
             } catch {
