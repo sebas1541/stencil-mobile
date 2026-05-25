@@ -63,15 +63,16 @@ enum ModelTier: String, CaseIterable, Codable, Identifiable, Hashable {
         }
     }
 
-    var subtitle: String {
-        switch self {
-        case .nano:      return "OpenCV local · Free"
-        case .flash:     return "Gemini 3.1 Flash · ~$0.07–$0.15"
-        case .pro:       return "Gemini 3 Pro · ~$0.14 (4K ~$0.24)"
-        case .gpt_mini:  return "gpt-image-1-mini · from ~$0.006"
-        case .gpt_flash: return "gpt-image-1.5 · from ~$0.013"
-        case .gpt_pro:   return "gpt-image-2 · token-metered"
-        }
+    /// Slim price label shown on the right of a tier row. Provider /
+    /// implementation details are intentionally hidden — the user picks
+    /// "Veca Flash", not "Gemini 3.1 Flash".
+    func priceLabel(for resolution: Resolution) -> String {
+        if self == .nano { return "Free" }
+        let cost = CostTable.estimate(tier: self, resolution: resolution)
+        let prefix = (self == .gpt_mini || self == .gpt_flash || self == .gpt_pro)
+            ? "from ~"
+            : "~"
+        return String(format: "\(prefix)$%.3f/img", cost)
     }
 
     /// Whether the tier requires the prompt_mode to be `standard`

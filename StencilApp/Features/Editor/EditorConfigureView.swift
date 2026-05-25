@@ -53,7 +53,7 @@ struct EditorConfigureView: View {
 
     private var configColumn: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Spacing.xl) {
+            VStack(alignment: .leading, spacing: Spacing.lg) {
                 tierSection
                 styleAndResolutionRow
                 promptControlsSection
@@ -64,21 +64,21 @@ struct EditorConfigureView: View {
             // shadows that bleed sideways. Combined with .scrollClipDisabled
             // below this keeps shadows from clipping at the scroll edges.
             .padding(.horizontal, 4)
-            .padding(.vertical, Spacing.md)
+            .padding(.vertical, Spacing.sm)
         }
         .scrollClipDisabled()
     }
 
-    // MARK: - Tier (vertical cards)
+    // MARK: - Tier (vertical list)
 
     private var tierSection: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
             SectionLabel(text: "Processing tier")
-            let columns = [GridItem(.adaptive(minimum: 220), spacing: Spacing.md)]
-            LazyVGrid(columns: columns, alignment: .leading, spacing: Spacing.md) {
+            VStack(spacing: 6) {
                 ForEach(ModelTier.allCases) { tier in
-                    TierCard(
+                    TierRow(
                         tier: tier,
+                        resolution: viewModel.parameters.resolution,
                         isSelected: viewModel.parameters.tier == tier
                     ) {
                         viewModel.parameters.tier = tier
@@ -86,9 +86,6 @@ struct EditorConfigureView: View {
                     }
                 }
             }
-            Text(viewModel.costLabel)
-                .font(.footnote.monospacedDigit())
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -149,9 +146,9 @@ struct EditorConfigureView: View {
     // single logical control so the visual hierarchy stops feeling muddled.
 
     private var promptControlsSection: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
             SectionLabel(text: "Prompt controls")
-            VStack(spacing: Spacing.md) {
+            VStack(spacing: 6) {
                 backgroundCard
                 thicknessCard
                 shadowsCard
@@ -176,26 +173,27 @@ struct EditorConfigureView: View {
                 .labelsHidden()
                 .tint(AppColor.accent)
         }
-        .padding(Spacing.md)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, 10)
         .liquidGlassCard(cornerRadius: Radius.md)
     }
 
     private var thicknessCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
-                iconBadge(systemName: "lineweight")
-                Text("Main contour thickness")
-                    .font(AppFont.bodyEmphasis)
-                Spacer()
-            }
+        HStack(spacing: Spacing.md) {
+            iconBadge(systemName: "lineweight")
+            Text("Main contour thickness")
+                .font(AppFont.bodyEmphasis)
+            Spacer(minLength: Spacing.sm)
             Picker("Thickness", selection: $viewModel.parameters.promptConfig.uiThickness) {
                 ForEach(Thickness.allCases) { value in
                     Text(value.rawValue).tag(value.rawValue)
                 }
             }
             .pickerStyle(.segmented)
+            .frame(width: 240)
         }
-        .padding(Spacing.md)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, 10)
         .liquidGlassCard(cornerRadius: Radius.md)
     }
 
@@ -224,21 +222,13 @@ struct EditorConfigureView: View {
             }
 
             if viewModel.parameters.promptConfig.uiShadowsEnabled {
-                VStack(alignment: .leading, spacing: Spacing.sm) {
-                    Text("Detail")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 6) {
                     Picker("Detail", selection: $viewModel.parameters.promptConfig.uiShadowDetail) {
                         ForEach(ShadowDetail.allCases) { value in
                             Text(value.rawValue).tag(value.rawValue)
                         }
                     }
                     .pickerStyle(.segmented)
-
-                    Text("Weight")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                        .padding(.top, 2)
                     Picker("Weight", selection: $viewModel.parameters.promptConfig.uiShadowWeight) {
                         ForEach(ShadowWeight.allCases) { value in
                             Text(value.rawValue).tag(value.rawValue)
@@ -250,26 +240,27 @@ struct EditorConfigureView: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
-        .padding(Spacing.md)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, 10)
         .liquidGlassCard(cornerRadius: Radius.md)
     }
 
     private var textureCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
-                iconBadge(systemName: "circle.grid.cross")
-                Text("Texture filtering")
-                    .font(AppFont.bodyEmphasis)
-                Spacer()
-            }
+        HStack(spacing: Spacing.md) {
+            iconBadge(systemName: "circle.grid.cross")
+            Text("Texture filtering")
+                .font(AppFont.bodyEmphasis)
+            Spacer(minLength: Spacing.sm)
             Picker("Texture", selection: $viewModel.parameters.promptConfig.uiTextureLevel) {
                 ForEach(TextureLevel.allCases) { value in
                     Text(value.rawValue).tag(value.rawValue)
                 }
             }
             .pickerStyle(.segmented)
+            .frame(width: 320)
         }
-        .padding(Spacing.md)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, 10)
         .liquidGlassCard(cornerRadius: Radius.md)
     }
 
@@ -337,58 +328,61 @@ struct EditorConfigureView: View {
     }
 }
 
-// MARK: - Tier card
+// MARK: - Tier row (single-line list item)
 
-private struct TierCard: View {
+private struct TierRow: View {
     let tier: ModelTier
+    let resolution: Resolution
     let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: Spacing.xs) {
-                HStack(spacing: 6) {
-                    Image(systemName: tier.isLocal ? "cpu" : "sparkles")
-                        .font(.callout)
-                        .foregroundStyle(isSelected ? Color.white : AppColor.accent)
-                    Text(tier.displayName)
-                        .font(AppFont.bodyEmphasis)
-                        .foregroundStyle(isSelected ? Color.white : Color.primary)
-                    Spacer()
-                    if isSelected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color.white.opacity(0.95))
-                    }
-                }
-                Text(tier.subtitle)
-                    .font(.caption2)
+            HStack(spacing: Spacing.md) {
+                Image(systemName: tier.isLocal ? "cpu" : "sparkles")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(isSelected ? Color.white : AppColor.accent)
+                    .frame(width: 18)
+
+                Text(tier.displayName)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(isSelected ? Color.white : Color.primary)
+
+                Spacer(minLength: Spacing.md)
+
+                Text(tier.priceLabel(for: resolution))
+                    .font(.subheadline.monospacedDigit())
                     .foregroundStyle(isSelected
                                       ? Color.white.opacity(0.85)
                                       : Color.secondary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
+
+                if isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.white)
+                        .padding(.leading, 2)
+                }
             }
-            .padding(Spacing.md)
+            .padding(.horizontal, Spacing.md)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
                     .fill(
                         isSelected
                         ? AnyShapeStyle(AppColor.accent)
-                        : AnyShapeStyle(AppColor.accent.opacity(0.07))
+                        : AnyShapeStyle(AppColor.accent.opacity(0.06))
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
                             .strokeBorder(
-                                isSelected
-                                ? AppColor.accent.opacity(0.0)
-                                : AppColor.accent.opacity(0.22),
+                                isSelected ? .clear : AppColor.accent.opacity(0.18),
                                 lineWidth: 1
                             )
                     )
             }
             .shadow(
-                color: isSelected ? AppColor.accent.opacity(0.30) : .clear,
+                color: isSelected ? AppColor.accent.opacity(0.25) : .clear,
                 radius: 10, x: 0, y: 4
             )
         }
