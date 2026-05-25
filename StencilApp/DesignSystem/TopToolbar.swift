@@ -33,8 +33,10 @@ struct TopToolbar: View {
         .padding(.vertical, Spacing.sm)
         .liquidGlassCard(cornerRadius: Radius.lg)
         // Subtle elevation so the bar reads as "above the content layer"
-        // even when the underlying canvas is the same hue.
-        .shadow(color: Color.black.opacity(0.06), radius: 14, x: 0, y: 4)
+        // even when the underlying canvas is the same hue. Two shadows give a
+        // softer, more Apple-y feel than a single hard one.
+        .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 6)
+        .shadow(color: Color.black.opacity(0.04), radius: 2,  x: 0, y: 1)
     }
 
     // MARK: - Regular (iPad / unsplit)

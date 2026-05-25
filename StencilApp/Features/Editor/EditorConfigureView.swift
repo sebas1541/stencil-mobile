@@ -343,26 +343,46 @@ private struct TierCard: View {
                 HStack(spacing: 6) {
                     Image(systemName: tier.isLocal ? "cpu" : "sparkles")
                         .font(.callout)
-                        .foregroundStyle(isSelected ? AppColor.accent : .secondary)
+                        .foregroundStyle(isSelected ? Color.white : AppColor.accent)
                     Text(tier.displayName)
                         .font(AppFont.bodyEmphasis)
+                        .foregroundStyle(isSelected ? Color.white : Color.primary)
                     Spacer()
                     if isSelected {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(AppColor.accent)
+                            .foregroundStyle(Color.white.opacity(0.95))
                     }
                 }
                 Text(tier.subtitle)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(isSelected
+                                      ? Color.white.opacity(0.85)
+                                      : Color.secondary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(Spacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .liquidGlassChip(
-                tint: isSelected ? AppColor.accent : nil,
-                prominent: isSelected
+            .background {
+                RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                    .fill(
+                        isSelected
+                        ? AnyShapeStyle(AppColor.accent)
+                        : AnyShapeStyle(AppColor.accent.opacity(0.07))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                            .strokeBorder(
+                                isSelected
+                                ? AppColor.accent.opacity(0.0)
+                                : AppColor.accent.opacity(0.22),
+                                lineWidth: 1
+                            )
+                    )
+            }
+            .shadow(
+                color: isSelected ? AppColor.accent.opacity(0.30) : .clear,
+                radius: 10, x: 0, y: 4
             )
         }
         .buttonStyle(.plain)

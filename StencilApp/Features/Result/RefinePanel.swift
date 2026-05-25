@@ -73,16 +73,32 @@ struct RefinePanel: View {
                     } label: {
                         HStack(spacing: Spacing.sm) {
                             Image(systemName: entry.systemImage)
-                                .foregroundStyle(mode == entry ? AppColor.accent : .secondary)
+                                .foregroundStyle(mode == entry ? Color.white : AppColor.accent)
                             Text(entry.title)
                                 .font(AppFont.bodyEmphasis)
+                                .foregroundStyle(mode == entry ? Color.white : Color.primary)
                             Spacer()
                         }
                         .padding(.horizontal, Spacing.md)
                         .padding(.vertical, Spacing.sm)
-                        .liquidGlassChip(
-                            tint: mode == entry ? AppColor.accent : nil,
-                            prominent: mode == entry
+                        .background {
+                            RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                                .fill(
+                                    mode == entry
+                                    ? AnyShapeStyle(AppColor.accent)
+                                    : AnyShapeStyle(AppColor.accent.opacity(0.08))
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                                        .strokeBorder(
+                                            mode == entry ? .clear : AppColor.accent.opacity(0.22),
+                                            lineWidth: 1
+                                        )
+                                )
+                        }
+                        .shadow(
+                            color: mode == entry ? AppColor.accent.opacity(0.30) : .clear,
+                            radius: 8, x: 0, y: 3
                         )
                     }
                     .buttonStyle(.plain)

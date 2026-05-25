@@ -62,14 +62,33 @@ struct AnnotationPanel: View {
     private func layerChip(name: String, icon: String, muted: Bool) -> some View {
         HStack(spacing: Spacing.sm) {
             Image(systemName: icon)
-                .foregroundStyle(muted ? .secondary : AppColor.accent)
+                .foregroundStyle(muted ? AppColor.accent : Color.white)
             Text(name)
                 .font(AppFont.bodyEmphasis)
+                .foregroundStyle(muted ? Color.primary : Color.white)
             Spacer()
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, Spacing.sm)
-        .liquidGlassChip(tint: muted ? nil : AppColor.accent, prominent: !muted)
+        .background {
+            RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                .fill(
+                    muted
+                    ? AnyShapeStyle(AppColor.accent.opacity(0.08))
+                    : AnyShapeStyle(AppColor.accent)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                        .strokeBorder(
+                            muted ? AppColor.accent.opacity(0.22) : .clear,
+                            lineWidth: 1
+                        )
+                )
+        }
+        .shadow(
+            color: muted ? .clear : AppColor.accent.opacity(0.25),
+            radius: 8, x: 0, y: 3
+        )
     }
 
     // MARK: - Canvas
