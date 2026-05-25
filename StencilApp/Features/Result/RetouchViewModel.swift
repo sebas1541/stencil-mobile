@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import PencilKit
 import UIKit
 
 /// Owns all post-generation state: the original stencil, the user's retouch /
@@ -40,6 +41,14 @@ final class RetouchViewModel {
     var overlayImage: UIImage?
 
     var isRendering: Bool = false
+
+    /// Pencil annotations drawn on top of the retouched stencil. Survives
+    /// tab switches because it lives on the view model.
+    var annotationDrawing: PKDrawing = PKDrawing()
+
+    /// When `true`, finger input is ignored on the annotation canvas — gives
+    /// the artist palm-rest comfort with an Apple Pencil.
+    var pencilOnlyDrawing: Bool = true
 
     // MARK: - Internals
 
@@ -141,5 +150,39 @@ final class RetouchViewModel {
         let source = retouchedImage ?? stencilImage
         guard let source, let cg = source.cgImage else { return nil }
         return ProcreateExporter.transparentPNG(from: cg)
+    }
+
+    /// Render the current PKDrawing on top of the retouched stencil at the
+    /// stencil's native pixel size. Returns `nil` when there's nothing to
+    /// export yet.
+    func annotatedStencilPNG() -> Data? {
+        let base = retouchedImage ?? stencilImage
+        guard let base else { return nil }
+
+        // Skip the composite step if the artist hasn't drawn anything.
+        if annotationDrawing.bounds.isEmpty {
+            return base.pngData()
+        }
+
+        let size = base.size
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        format.opaque = true
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+        let composed = renderer.image { _ in
+            base.draw(in: CGRect(origin: .zero, size: size))
+            let drawingImage = annotationDrawing.image(
+                from: CGRect(origin: .zero, size: size),
+                scale: 1
+            )
+            drawingImage.draw(in: CGRect(origin: .zero, size: size))
+        }
+        return composed.pngData()
+    }
+
+    /// Wipe all pencil strokes — used by the Clear button on the annotation
+    /// panel.
+    func clearAnnotation() {
+        annotationDrawing = PKDrawing()
     }
 }

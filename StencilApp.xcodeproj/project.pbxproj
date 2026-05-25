@@ -14,6 +14,7 @@
 		1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */; };
 		1D9070B78C649E0EF7D5F8B0 /* RetouchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9B1B6D6779A91AD1557285 /* RetouchViewModel.swift */; };
 		21E628D587458D7DC2ACA37F /* ProcreateExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CAB6DBBFFFE041BA7B62FB /* ProcreateExporter.swift */; };
+		3063645457D32C1CA0053C31 /* AnnotationCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */; };
 		337ED87506BA32A89114CB0C /* ResultInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5979422A27F3132256FB8E08 /* ResultInspector.swift */; };
 		373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */; };
 		392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA6147DB48E5105E768685 /* StencilApp.swift */; };
@@ -24,6 +25,7 @@
 		599FE748A8B890768D13F772 /* RetouchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906FBC7690ED1528B734D286 /* RetouchEngine.swift */; };
 		679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FFC516AFD5A75C384F8E91 /* StencilService.swift */; };
 		8DF68D71318DD972B6DE384A /* GlassImagePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E1AA8649F9DFF81330FF95 /* GlassImagePreview.swift */; };
+		96698DB63DD2E34F4BA9D789 /* AnnotationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3104441BFAD0353B9E0AC9 /* AnnotationPanel.swift */; };
 		C0A7CCEC473B73D5E4409046 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 337B6679F44A61713A6BC34A /* Assets.xcassets */; };
 		C55640736316E4F0A01FAAC0 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB23F44F6280A760D826D4EA /* PhotoSaver.swift */; };
 		C6D68A91F6531717A6CD26F5 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92A57A0E4BD698140422353 /* RootView.swift */; };
@@ -56,6 +58,7 @@
 		7A70ACF4922A957084C16C93 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		906FBC7690ED1528B734D286 /* RetouchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetouchEngine.swift; sourceTree = "<group>"; };
 		92263B2A331905F82EE70E5A /* EditorContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerView.swift; sourceTree = "<group>"; };
+		A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationCanvas.swift; sourceTree = "<group>"; };
 		C114628842C93253ADCED5D1 /* ExportPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPanel.swift; sourceTree = "<group>"; };
 		C8FFC516AFD5A75C384F8E91 /* StencilService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StencilService.swift; sourceTree = "<group>"; };
 		D15B25D4E60243F8B3B00102 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -66,6 +69,7 @@
 		F59882D59670F94468F4BAE6 /* HistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStore.swift; sourceTree = "<group>"; };
 		F6894C539238E6369EDDA2EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F92A57A0E4BD698140422353 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		FB3104441BFAD0353B9E0AC9 /* AnnotationPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationPanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -182,6 +186,8 @@
 		E5DD413E5610EF1ED1C7CF86 /* Result */ = {
 			isa = PBXGroup;
 			children = (
+				A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */,
+				FB3104441BFAD0353B9E0AC9 /* AnnotationPanel.swift */,
 				C114628842C93253ADCED5D1 /* ExportPanel.swift */,
 				2B14FFA46CE9CDF3AC7A04D7 /* OverlayPanel.swift */,
 				5979422A27F3132256FB8E08 /* ResultInspector.swift */,
@@ -271,6 +277,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6E2A21BCADB83E52DE87548 /* APIClient.swift in Sources */,
+				3063645457D32C1CA0053C31 /* AnnotationCanvas.swift in Sources */,
+				96698DB63DD2E34F4BA9D789 /* AnnotationPanel.swift in Sources */,
 				D29E13CC67B4F7823AACFCAD /* Colors.swift in Sources */,
 				107B2D3857CF584F5CBE4114 /* EditorConfigureView.swift in Sources */,
 				EA4F56B0A7A56ECD9D392EA2 /* EditorContainerView.swift in Sources */,

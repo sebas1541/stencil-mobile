@@ -13,22 +13,24 @@ struct ResultView: View {
     @State private var showInspector: Bool = false
 
     enum ResultTab: String, Hashable, Identifiable, CaseIterable {
-        case retouch, overlay, export
+        case retouch, overlay, annotate, export
         var id: String { rawValue }
 
         var title: String {
             switch self {
-            case .retouch: return "Retouch"
-            case .overlay: return "Overlay"
-            case .export:  return "Export"
+            case .retouch:  return "Retouch"
+            case .overlay:  return "Overlay"
+            case .annotate: return "Annotate"
+            case .export:   return "Export"
             }
         }
 
         var systemImage: String {
             switch self {
-            case .retouch: return "slider.horizontal.3"
-            case .overlay: return "rectangle.on.rectangle"
-            case .export:  return "square.and.arrow.up"
+            case .retouch:  return "slider.horizontal.3"
+            case .overlay:  return "rectangle.on.rectangle"
+            case .annotate: return "pencil.tip"
+            case .export:   return "square.and.arrow.up"
             }
         }
     }
@@ -91,26 +93,30 @@ struct ResultView: View {
         }
     }
 
-    // MARK: - Tab picker (glass chip row)
+    // MARK: - Tab picker (glass chip row, scrolls horizontally on narrow widths)
 
     private var tabPicker: some View {
         HStack(spacing: Spacing.sm) {
-            ForEach(ResultTab.allCases) { tab in
-                Button {
-                    withAnimation(.snappy) { selectedTab = tab }
-                } label: {
-                    Label(tab.title, systemImage: tab.systemImage)
-                        .font(.subheadline.weight(.medium))
-                        .padding(.horizontal, Spacing.lg)
-                        .padding(.vertical, Spacing.sm)
-                        .liquidGlassChip(
-                            tint: selectedTab == tab ? AppColor.accent : nil,
-                            prominent: selectedTab == tab
-                        )
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Spacing.sm) {
+                    ForEach(ResultTab.allCases) { tab in
+                        Button {
+                            withAnimation(.snappy) { selectedTab = tab }
+                        } label: {
+                            Label(tab.title, systemImage: tab.systemImage)
+                                .font(.subheadline.weight(.medium))
+                                .padding(.horizontal, Spacing.lg)
+                                .padding(.vertical, Spacing.sm)
+                                .liquidGlassChip(
+                                    tint: selectedTab == tab ? AppColor.accent : nil,
+                                    prominent: selectedTab == tab
+                                )
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
-                .buttonStyle(.plain)
+                .padding(.horizontal, 2)
             }
-            Spacer()
             if viewModel.isRendering {
                 ProgressView()
                     .controlSize(.small)
@@ -140,9 +146,10 @@ struct ResultView: View {
             placeholder
         } else {
             switch selectedTab {
-            case .retouch: RetouchPanel(viewModel: viewModel)
-            case .overlay: OverlayPanel(viewModel: viewModel)
-            case .export:  ExportPanel(viewModel: viewModel, response: response)
+            case .retouch:  RetouchPanel(viewModel: viewModel)
+            case .overlay:  OverlayPanel(viewModel: viewModel)
+            case .annotate: AnnotationPanel(viewModel: viewModel)
+            case .export:   ExportPanel(viewModel: viewModel, response: response)
             }
         }
     }
