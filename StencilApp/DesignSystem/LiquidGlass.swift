@@ -17,36 +17,95 @@ extension View {
     }
 }
 
-// MARK: - Glass card
+// MARK: - Content-layer card
+//
+// IMPORTANT — these are CONTENT-LAYER surfaces. Per Apple's iPadOS 26
+// design guidance (HIG: Materials, "Adopting Liquid Glass"), Liquid Glass
+// is reserved for the NAVIGATION layer — toolbars, tab bars, sidebars.
+// Content cards must use standard materials. This modifier therefore
+// always renders `.regularMaterial`, even on iOS 26.
+//
+// Use `.liquidGlassNavigationSurface()` instead for the top toolbar /
+// sidebar surfaces where genuine Liquid Glass is appropriate.
 
-/// Card-style surface. Liquid Glass on 26+, `.regularMaterial` fallback below.
 struct LiquidGlassCard: ViewModifier {
     let cornerRadius: CGFloat
 
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
-                .background {
-                    Color.clear
-                        .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-                }
-        } else {
-            content
-                .background {
-                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .fill(.regularMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                                .strokeBorder(AppColor.borderSubtle, lineWidth: 0.5)
-                        )
-                }
-        }
+        content
+            .background {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(.regularMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .strokeBorder(AppColor.borderSubtle.opacity(0.6), lineWidth: 0.5)
+                    )
+            }
     }
 }
 
 extension View {
     func liquidGlassCard(cornerRadius: CGFloat = Radius.lg) -> some View {
         modifier(LiquidGlassCard(cornerRadius: cornerRadius))
+    }
+}
+
+// MARK: - Navigation-layer Liquid Glass surface
+
+/// Use this for surfaces that genuinely belong in Apple's navigation
+/// layer — top toolbar background, sidebar background, floating action
+/// chips that overlay scrolling content.
+struct LiquidGlassNavigationSurface: ViewModifier {
+    let shape: ContainerShape
+
+    enum ContainerShape {
+        case capsule
+        case rect(cornerRadius: CGFloat)
+    }
+
+    func body(content: Content) -> some View {
+        content.background {
+            navigationBackground
+        }
+    }
+
+    @ViewBuilder
+    private var navigationBackground: some View {
+        if #available(iOS 26.0, *) {
+            switch shape {
+            case .capsule:
+                Capsule(style: .continuous)
+                    .fill(.clear)
+                    .glassEffect(.regular, in: .capsule)
+            case let .rect(cornerRadius):
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(.clear)
+                    .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
+            }
+        } else {
+            switch shape {
+            case .capsule:
+                Capsule(style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        Capsule(style: .continuous)
+                            .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+                    )
+            case let .rect(cornerRadius):
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+                    )
+            }
+        }
+    }
+}
+
+extension View {
+    func liquidGlassNavigationSurface(_ shape: LiquidGlassNavigationSurface.ContainerShape) -> some View {
+        modifier(LiquidGlassNavigationSurface(shape: shape))
     }
 }
 

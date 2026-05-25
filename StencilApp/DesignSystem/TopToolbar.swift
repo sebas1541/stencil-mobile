@@ -31,26 +31,13 @@ struct TopToolbar: View {
         }
         .padding(.horizontal, Spacing.md)
         .padding(.vertical, 6)
-        // Capsule background — Apple's floating-pill aesthetic from the App
-        // Store / Maps / Calendar headers.
-        .background {
-            if #available(iOS 26.0, *) {
-                Capsule(style: .continuous)
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .capsule)
-            } else {
-                Capsule(style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        Capsule(style: .continuous)
-                            .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
-                    )
-            }
-        }
-        // Softer, more Apple-y elevation. Two layers — a wide diffuse one
-        // plus a tight contact shadow.
-        .shadow(color: Color.black.opacity(0.08), radius: 20, x: 0, y: 8)
-        .shadow(color: Color.black.opacity(0.04), radius: 2,  x: 0, y: 1)
+        // Navigation-layer Liquid Glass surface (Apple's floating-pill
+        // aesthetic from the App Store / Maps / Calendar headers).
+        .liquidGlassNavigationSurface(.capsule)
+        // Per Apple HIG / "Adopting Liquid Glass", the material itself
+        // provides elevation — manual stacked shadows would muddy the
+        // hierarchy. Single soft shadow only.
+        .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 6)
     }
 
     // MARK: - Regular (iPad / unsplit)
