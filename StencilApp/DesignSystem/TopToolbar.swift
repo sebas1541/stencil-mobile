@@ -30,12 +30,26 @@ struct TopToolbar: View {
             compactLayout
         }
         .padding(.horizontal, Spacing.md)
-        .padding(.vertical, Spacing.sm)
-        .liquidGlassCard(cornerRadius: Radius.lg)
-        // Subtle elevation so the bar reads as "above the content layer"
-        // even when the underlying canvas is the same hue. Two shadows give a
-        // softer, more Apple-y feel than a single hard one.
-        .shadow(color: Color.black.opacity(0.10), radius: 18, x: 0, y: 6)
+        .padding(.vertical, 6)
+        // Capsule background — Apple's floating-pill aesthetic from the App
+        // Store / Maps / Calendar headers.
+        .background {
+            if #available(iOS 26.0, *) {
+                Capsule(style: .continuous)
+                    .fill(.clear)
+                    .glassEffect(.regular, in: .capsule)
+            } else {
+                Capsule(style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        Capsule(style: .continuous)
+                            .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
+                    )
+            }
+        }
+        // Softer, more Apple-y elevation. Two layers — a wide diffuse one
+        // plus a tight contact shadow.
+        .shadow(color: Color.black.opacity(0.08), radius: 20, x: 0, y: 8)
         .shadow(color: Color.black.opacity(0.04), radius: 2,  x: 0, y: 1)
     }
 
@@ -125,47 +139,83 @@ struct TopToolbar: View {
         }
     }
 
-    /// Custom segmented picker built from glass chips so we get a clearly
-    /// visible "selected" state instead of the very subtle default segmented
-    /// control. Matches Calendar's Day/Week/Month/Year vibe more closely.
+    /// Apple-style segmented picker. The selected indicator is a Liquid Glass
+    /// pill that *slides* between segments via `matchedGeometryEffect`, the
+    /// way Apple does it in the App Store / Maps / Calendar headers (iOS 26).
+    ///
+    /// Text colour stays `.primary` for every segment — selection is
+    /// communicated by the glass pill behind the selected label, not by
+    /// recolouring the text.
+    @Namespace private var selectionNamespace
+
     private var sectionPicker: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 2) {
             ForEach(AppSection.allCases) { section in
                 Button {
-                    withAnimation(.snappy(duration: 0.18)) {
+                    // Spring matches Apple's stock segmented control feel.
+                    withAnimation(.spring(response: 0.32, dampingFraction: 0.78)) {
                         selectedSection = section
                     }
                 } label: {
                     Text(section.displayName)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(
-                            selectedSection == section ? AnyShapeStyle(.white) : AnyShapeStyle(.primary)
-                        )
-                        .padding(.horizontal, Spacing.md)
-                        .padding(.vertical, 6)
-                        .background {
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 7)
+                        .contentShape(Capsule())
+                        .background(alignment: .center) {
                             if selectedSection == section {
-                                Capsule(style: .continuous)
-                                    .fill(AppColor.accent)
-                                    .shadow(color: AppColor.accent.opacity(0.35), radius: 6, x: 0, y: 2)
-                            } else {
-                                Capsule(style: .continuous)
-                                    .fill(Color.clear)
+                                selectedPill
+                                    .matchedGeometryEffect(
+                                        id: "section.selected",
+                                        in: selectionNamespace
+                                    )
                             }
                         }
                 }
                 .buttonStyle(.plain)
             }
         }
-        .padding(4)
-        .background {
+        .padding(3)
+        .background(trackBackground)
+        .fixedSize(horizontal: true, vertical: false)
+    }
+
+    /// The selected pill — opaque system-background fill with a hairline
+    /// border + soft drop shadow, so it reads as a distinct surface
+    /// floating above the translucent track. iOS 26 also overlays a
+    /// `.glassEffect` so it picks up Liquid Glass refraction.
+    @ViewBuilder
+    private var selectedPill: some View {
+        ZStack {
             Capsule(style: .continuous)
-                .fill(.thinMaterial)
-                .overlay(
-                    Capsule(style: .continuous)
-                        .strokeBorder(AppColor.borderSubtle, lineWidth: 0.5)
-                )
+                .fill(Color(uiColor: .systemBackground))
+            if #available(iOS 26.0, *) {
+                Capsule(style: .continuous)
+                    .fill(.clear)
+                    .glassEffect(.regular, in: .capsule)
+            }
         }
+        .overlay(
+            Capsule(style: .continuous)
+                .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
+        )
+        .shadow(color: .black.opacity(0.08), radius: 3, x: 0, y: 1)
+    }
+
+    /// "Track" behind all segments — slightly tinted neutral so the white
+    /// pill above visibly contrasts even in light mode. Matches the App
+    /// Store header treatment.
+    @ViewBuilder
+    private var trackBackground: some View {
+        Capsule(style: .continuous)
+            .fill(Color.black.opacity(0.06))
+            .overlay(
+                Capsule(style: .continuous)
+                    .strokeBorder(Color.black.opacity(0.04), lineWidth: 0.5)
+            )
     }
 
     private var rightGroup: some View {
