@@ -332,6 +332,12 @@ struct EditorConfigureView: View {
 }
 
 // MARK: - Tier row (single-line list item)
+//
+// Per Apple's iPadOS 26 guidance (Perplexity research, citing the
+// "Adopting Liquid Glass" docs): selected list rows transform into a
+// *tinted Liquid Glass pill*, not a solid accent fill. Unselected rows
+// stay on a soft accent-tinted standard material. Text colour stays
+// semantic — the glass tint + checkmark communicate selection.
 
 private struct TierRow: View {
     let tier: ModelTier
@@ -343,52 +349,65 @@ private struct TierRow: View {
         Button(action: onTap) {
             HStack(spacing: Spacing.md) {
                 Image(systemName: tier.isLocal ? "cpu" : "sparkles")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(isSelected ? Color.white : AppColor.accent)
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(AppColor.accent)
                     .frame(width: 18)
 
                 Text(tier.displayName)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(isSelected ? Color.white : Color.primary)
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(.primary)
 
                 Spacer(minLength: Spacing.md)
 
                 Text(tier.priceLabel(for: resolution))
                     .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(isSelected
-                                      ? Color.white.opacity(0.85)
-                                      : Color.secondary)
+                    .foregroundStyle(.secondary)
 
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.subheadline)
-                        .foregroundStyle(Color.white)
+                        .foregroundStyle(AppColor.accent)
                         .padding(.leading, 2)
                 }
             }
             .padding(.horizontal, Spacing.md)
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
-                    .fill(
-                        isSelected
-                        ? AnyShapeStyle(AppColor.accent)
-                        : AnyShapeStyle(AppColor.accent.opacity(0.06))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
-                            .strokeBorder(
-                                isSelected ? .clear : AppColor.accent.opacity(0.18),
-                                lineWidth: 1
-                            )
-                    )
-            }
-            .shadow(
-                color: isSelected ? AppColor.accent.opacity(0.25) : .clear,
-                radius: 10, x: 0, y: 4
-            )
+            .background { background }
         }
         .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private var background: some View {
+        if isSelected {
+            if #available(iOS 26.0, *) {
+                // Selected = tinted Liquid Glass pill (Apple's pattern for
+                // list row selection on iPadOS 26).
+                RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                    .fill(.clear)
+                    .glassEffect(
+                        .regular.tint(AppColor.accent.opacity(0.55)),
+                        in: .rect(cornerRadius: Radius.md)
+                    )
+            } else {
+                RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                    .fill(AppColor.accent.opacity(0.20))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                            .strokeBorder(AppColor.accent.opacity(0.50), lineWidth: 1)
+                    )
+            }
+        } else {
+            // Unselected = soft accent tint over the dark canvas — standard
+            // material would disappear on a near-black background, so we
+            // use a low-opacity indigo wash instead.
+            RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                .fill(AppColor.accent.opacity(0.06))
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                        .strokeBorder(AppColor.accent.opacity(0.12), lineWidth: 1)
+                )
+        }
     }
 }
