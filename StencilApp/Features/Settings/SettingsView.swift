@@ -98,16 +98,41 @@ struct SettingsView: View {
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             SectionLabel(text: "About")
-            VStack(alignment: .leading, spacing: Spacing.sm) {
-                Text("Stencil")
-                    .font(.headline)
-                Text("v0.1.0 — iPad/iPhone client for the stencil microservice.")
+            VStack(alignment: .leading, spacing: Spacing.md) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Stencil")
+                        .font(.headline)
+                    Spacer()
+                    Text("v\(appVersion) (\(appBuild))")
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.secondary)
+                }
+                Text("Native iPad / iPhone client for the stencil microservice. Built with SwiftUI, Core Image, and PencilKit. No third-party dependencies.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+
+                Divider()
+
+                Link(destination: URL(string: "https://github.com/sebas1541/stencil-mobile")!) {
+                    Label("View source on GitHub", systemImage: "chevron.left.forwardslash.chevron.right")
+                        .font(.footnote)
+                }
+                Link(destination: URL(string: "https://github.com/sebas1541/stencil-mobile/blob/main/STENCIL_APP_FUNCTIONALITY.md")!) {
+                    Label("Functionality reference", systemImage: "doc.text")
+                        .font(.footnote)
+                }
             }
             .padding(Spacing.lg)
             .liquidGlassCard()
         }
+    }
+
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0"
+    }
+
+    private var appBuild: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
     }
 
     // MARK: - Probe
