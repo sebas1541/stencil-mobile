@@ -1,14 +1,19 @@
 import SwiftUI
 
-/// "Spotlight-style" global search at the right of the toolbar. Indexes four
-/// kinds of things at once: sections, tattoo styles, settings shortcuts, and
-/// recent generations from the `HistoryStore`. Tapping a result fires the
-/// appropriate callback on the parent.
+/// Apple Mail / Notes style: starts as a small magnifier icon chip, expands
+/// into a full search field on tap. While expanded, shows a Spotlight-like
+/// dropdown that indexes sections, tattoo styles, settings shortcuts, and
+/// recent generations from the `HistoryStore`.
+///
+/// Uses `matchedGeometryEffect` so the chip morphs between states inside a
+/// parent `GlassEffectContainer` — the Apple-recommended pattern.
 struct GlobalSearchField: View {
     @Bindable var history: HistoryStore
-
     @Binding var query: String
+
+    @State private var isExpanded: Bool = false
     @FocusState private var isFocused: Bool
+    @Namespace private var morphNamespace
 
     var onPickSection: (AppSection) -> Void
     var onPickStyle: (StyleName) -> Void
@@ -20,43 +25,88 @@ struct GlobalSearchField: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            field
-            if isFocused {
-                results
-                    .transition(.opacity.combined(with: .move(edge: .top)))
+        VStack(alignment: .trailing, spacing: 6) {
+            if isExpanded {
+                expandedField
+                    .matchedGeometryEffect(id: "search.chip", in: morphNamespace)
+                if isFocused {
+                    results
+                        .frame(maxWidth: 320, alignment: .trailing)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+            } else {
+                collapsedButton
+                    .matchedGeometryEffect(id: "search.chip", in: morphNamespace)
             }
         }
-        .animation(.snappy(duration: 0.18), value: isFocused)
+        .animation(.spring(response: 0.36, dampingFraction: 0.82), value: isExpanded)
         .animation(.snappy(duration: 0.18), value: trimmedQuery)
     }
 
-    // MARK: - Field
+    // MARK: - Collapsed (icon-only)
 
-    private var field: some View {
+    private var collapsedButton: some View {
+        Button {
+            isExpanded = true
+            // Defer focus so the field is in the view hierarchy before we
+            // try to grab the keyboard.
+            DispatchQueue.main.async { isFocused = true }
+        } label: {
+            Image(systemName: "magnifyingglass")
+                .font(.callout.weight(.medium))
+                .foregroundStyle(.secondary)
+                .frame(width: 38, height: 38)
+        }
+        .buttonStyle(.plain)
+        .liquidGlassNavigationSurface(.capsule)
+        .accessibilityLabel("Search")
+    }
+
+    // MARK: - Expanded (full field)
+
+    private var expandedField: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+
             TextField("Search", text: $query)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled(true)
                 .focused($isFocused)
-            if !trimmedQuery.isEmpty {
-                Button {
+
+            Button {
+                if trimmedQuery.isEmpty {
+                    collapse()
+                } else {
                     query = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
                 }
-                .buttonStyle(.plain)
+            } label: {
+                Image(systemName: trimmedQuery.isEmpty ? "xmark" : "xmark.circle.fill")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
             }
+            .buttonStyle(.plain)
         }
         .font(.subheadline)
         .padding(.horizontal, Spacing.md)
-        .padding(.vertical, Spacing.sm)
-        .frame(minWidth: 220, maxWidth: 320)
-        .liquidGlassChip(tint: nil, prominent: false)
+        .padding(.vertical, 8)
+        .frame(width: 280)
+        .liquidGlassNavigationSurface(.capsule)
+        .onSubmit { /* nothing — selection happens via the dropdown */ }
+        .onChange(of: isFocused) { _, focused in
+            if !focused, trimmedQuery.isEmpty {
+                // Collapse automatically when the user dismisses focus
+                // without typing anything.
+                collapse()
+            }
+        }
+    }
+
+    private func collapse() {
+        query = ""
+        isFocused = false
+        isExpanded = false
     }
 
     // MARK: - Results dropdown
@@ -78,7 +128,6 @@ struct GlobalSearchField: View {
             .padding(Spacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)
             .liquidGlassCard(cornerRadius: Radius.md)
-            .padding(.top, 6)
         } else {
             VStack(alignment: .leading, spacing: Spacing.sm) {
                 if !sectionHits.isEmpty {
@@ -88,9 +137,7 @@ struct GlobalSearchField: View {
                                 icon: section.systemImage,
                                 title: section.displayName,
                                 subtitle: nil
-                            ) {
-                                commit { onPickSection(section) }
-                            }
+                            ) { commit { onPickSection(section) } }
                         }
                     }
                 }
@@ -101,9 +148,7 @@ struct GlobalSearchField: View {
                                 icon: "paintbrush",
                                 title: style.displayName,
                                 subtitle: "Apply + go to Generate"
-                            ) {
-                                commit { onPickStyle(style) }
-                            }
+                            ) { commit { onPickStyle(style) } }
                         }
                     }
                 }
@@ -114,9 +159,7 @@ struct GlobalSearchField: View {
                                 icon: "gearshape",
                                 title: hint,
                                 subtitle: "Open settings"
-                            ) {
-                                commit { onPickSettings() }
-                            }
+                            ) { commit { onPickSettings() } }
                         }
                     }
                 }
@@ -127,20 +170,15 @@ struct GlobalSearchField: View {
                                 icon: "clock",
                                 title: "\(entry.tier.displayName) · \(entry.estilo.displayName)",
                                 subtitle: entry.subtitle
-                            ) {
-                                commit { onPickHistory(entry) }
-                            }
+                            ) { commit { onPickHistory(entry) } }
                         }
                     }
                 }
             }
             .padding(Spacing.md)
             .liquidGlassCard(cornerRadius: Radius.md)
-            .padding(.top, 6)
         }
     }
-
-    // MARK: - Building blocks
 
     @ViewBuilder
     private func group<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
@@ -185,8 +223,7 @@ struct GlobalSearchField: View {
 
     private func commit(_ action: () -> Void) {
         action()
-        query = ""
-        isFocused = false
+        collapse()
     }
 
     // MARK: - Index
