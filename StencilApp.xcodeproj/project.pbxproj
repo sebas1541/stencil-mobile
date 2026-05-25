@@ -1,0 +1,460 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0773FBC7A020E28D8C626B20 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A9B2D7A258DB833B0812EC /* ResultView.swift */; };
+		0BD324D3C5DC7C719DCDEF5D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1D568C0003D046223E9AD1 /* Models.swift */; };
+		107B2D3857CF584F5CBE4114 /* EditorConfigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13427F4766950F5CF94613CF /* EditorConfigureView.swift */; };
+		1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */; };
+		373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */; };
+		392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA6147DB48E5105E768685 /* StencilApp.swift */; };
+		506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6584295EA58EC9F710A918D5 /* LiquidGlass.swift */; };
+		586C3C53F0E6EBF55C30ECFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */; };
+		679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FFC516AFD5A75C384F8E91 /* StencilService.swift */; };
+		C0A7CCEC473B73D5E4409046 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 337B6679F44A61713A6BC34A /* Assets.xcassets */; };
+		C6D68A91F6531717A6CD26F5 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92A57A0E4BD698140422353 /* RootView.swift */; };
+		D29E13CC67B4F7823AACFCAD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15B25D4E60243F8B3B00102 /* Colors.swift */; };
+		E6E2A21BCADB83E52DE87548 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A70ACF4922A957084C16C93 /* APIClient.swift */; };
+		EA4F56B0A7A56ECD9D392EA2 /* EditorContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92263B2A331905F82EE70E5A /* EditorContainerView.swift */; };
+		FBD6E38637BE9E57CD2F8B2B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF18EDE0E882BF43248A5C /* Theme.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		13427F4766950F5CF94613CF /* EditorConfigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorConfigureView.swift; sourceTree = "<group>"; };
+		24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCardView.swift; sourceTree = "<group>"; };
+		2ACF18EDE0E882BF43248A5C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
+		337B6679F44A61713A6BC34A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		54A9B2D7A258DB833B0812EC /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		5C1D568C0003D046223E9AD1 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		6584295EA58EC9F710A918D5 /* LiquidGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlass.swift; sourceTree = "<group>"; };
+		7A70ACF4922A957084C16C93 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		92263B2A331905F82EE70E5A /* EditorContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerView.swift; sourceTree = "<group>"; };
+		C8FFC516AFD5A75C384F8E91 /* StencilService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StencilService.swift; sourceTree = "<group>"; };
+		D15B25D4E60243F8B3B00102 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		D5BA6147DB48E5105E768685 /* StencilApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StencilApp.swift; sourceTree = "<group>"; };
+		D96A757558667EE12D72A1BF /* StencilApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = StencilApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6894C539238E6369EDDA2EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F92A57A0E4BD698140422353 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		09339210FF7FEAB927F2E3B6 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				13427F4766950F5CF94613CF /* EditorConfigureView.swift */,
+				92263B2A331905F82EE70E5A /* EditorContainerView.swift */,
+				2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		0B4AAE8F424FEDB84D5C0DB6 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F92A57A0E4BD698140422353 /* RootView.swift */,
+				D5BA6147DB48E5105E768685 /* StencilApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		251446AE3A42189E384268C1 = {
+			isa = PBXGroup;
+			children = (
+				99F37C017F0C223BB443F425 /* StencilApp */,
+				A28A192E8FAF8FA42C61698D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		534DD24B596260BD4F0186A9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7A70ACF4922A957084C16C93 /* APIClient.swift */,
+				C8FFC516AFD5A75C384F8E91 /* StencilService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6CAA6C7785483FFF397FEBDB /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		6CD6A4954F9276AE093819C8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				337B6679F44A61713A6BC34A /* Assets.xcassets */,
+				F6894C539238E6369EDDA2EE /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		79D961BBCF51D0E4AF07E1B2 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				D15B25D4E60243F8B3B00102 /* Colors.swift */,
+				6584295EA58EC9F710A918D5 /* LiquidGlass.swift */,
+				2ACF18EDE0E882BF43248A5C /* Theme.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		99F37C017F0C223BB443F425 /* StencilApp */ = {
+			isa = PBXGroup;
+			children = (
+				0B4AAE8F424FEDB84D5C0DB6 /* App */,
+				E2FFE94EECA8B8860616CBD7 /* Core */,
+				79D961BBCF51D0E4AF07E1B2 /* DesignSystem */,
+				B48FE2E3471FA3DA2E6A3770 /* Features */,
+				6CD6A4954F9276AE093819C8 /* Resources */,
+				534DD24B596260BD4F0186A9 /* Services */,
+			);
+			path = StencilApp;
+			sourceTree = "<group>";
+		};
+		A28A192E8FAF8FA42C61698D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D96A757558667EE12D72A1BF /* StencilApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B48FE2E3471FA3DA2E6A3770 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				09339210FF7FEAB927F2E3B6 /* Editor */,
+				6CAA6C7785483FFF397FEBDB /* Import */,
+				E5DD413E5610EF1ED1C7CF86 /* Result */,
+				F9227092795ED74CD2A62521 /* Settings */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E2FFE94EECA8B8860616CBD7 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				5C1D568C0003D046223E9AD1 /* Models.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E5DD413E5610EF1ED1C7CF86 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				54A9B2D7A258DB833B0812EC /* ResultView.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		F9227092795ED74CD2A62521 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CD7431BC4F12E903FBE85C5E /* StencilApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 64D70E57B7EFBF603E943F59 /* Build configuration list for PBXNativeTarget "StencilApp" */;
+			buildPhases = (
+				5F086EAA6B0252803820F7F5 /* Sources */,
+				6704408B5DB7649CC5642DE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StencilApp;
+			packageProductDependencies = (
+			);
+			productName = StencilApp;
+			productReference = D96A757558667EE12D72A1BF /* StencilApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C123A570D4D7A8E9B76DC46F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					CD7431BC4F12E903FBE85C5E = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 06C814E320A0B908E4C06D8E /* Build configuration list for PBXProject "StencilApp" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 251446AE3A42189E384268C1;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = A28A192E8FAF8FA42C61698D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD7431BC4F12E903FBE85C5E /* StencilApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6704408B5DB7649CC5642DE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0A7CCEC473B73D5E4409046 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5F086EAA6B0252803820F7F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E6E2A21BCADB83E52DE87548 /* APIClient.swift in Sources */,
+				D29E13CC67B4F7823AACFCAD /* Colors.swift in Sources */,
+				107B2D3857CF584F5CBE4114 /* EditorConfigureView.swift in Sources */,
+				EA4F56B0A7A56ECD9D392EA2 /* EditorContainerView.swift in Sources */,
+				373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */,
+				1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */,
+				506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */,
+				0BD324D3C5DC7C719DCDEF5D /* Models.swift in Sources */,
+				0773FBC7A020E28D8C626B20 /* ResultView.swift in Sources */,
+				C6D68A91F6531717A6CD26F5 /* RootView.swift in Sources */,
+				586C3C53F0E6EBF55C30ECFB /* SettingsView.swift in Sources */,
+				392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */,
+				679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */,
+				FBD6E38637BE9E57CD2F8B2B /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		ABDB5C1EAF0B21B44E9E1549 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C1E954BF510483EC2F254CEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Accent;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"StencilApp/Resources/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StencilApp/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ghostline.stencil;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE12CEF7632BBB8A4A13355F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 5.10;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FDF493D1DF06B71DBBB59F1A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = Accent;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"StencilApp/Resources/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StencilApp/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ghostline.stencil;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		06C814E320A0B908E4C06D8E /* Build configuration list for PBXProject "StencilApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABDB5C1EAF0B21B44E9E1549 /* Debug */,
+				CE12CEF7632BBB8A4A13355F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		64D70E57B7EFBF603E943F59 /* Build configuration list for PBXNativeTarget "StencilApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1E954BF510483EC2F254CEC /* Debug */,
+				FDF493D1DF06B71DBBB59F1A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C123A570D4D7A8E9B76DC46F /* Project object */;
+}

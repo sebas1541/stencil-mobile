@@ -1,0 +1,73 @@
+name: StencilApp
+options:
+  bundleIdPrefix: com.ghostline
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  defaultConfig: Debug
+  generateEmptyDirectories: false
+  groupSortPosition: top
+  groupOrdering:
+    - order: [App, DesignSystem, Core, Services, Features, Resources]
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    SUPPORTS_MACCATALYST: NO
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    CLANG_ENABLE_MODULES: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+
+targets:
+  StencilApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: StencilApp
+        excludes:
+          - "Resources/Preview Content/**"
+    resources:
+      - path: StencilApp/Resources/Assets.xcassets
+      - path: StencilApp/Resources/Preview Content
+        buildPhase: resources
+    info:
+      path: StencilApp/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: Stencil
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        LSRequiresIPhoneOS: true
+        UILaunchScreen:
+          UIColorName: PrimaryBackground
+        UIRequiredDeviceCapabilities: [arm64]
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiresFullScreen: false
+        ITSAppUsesNonExemptEncryption: false
+        NSPhotoLibraryUsageDescription: "Stencil needs access to your photos to load reference images for tattoo stencil generation."
+        NSPhotoLibraryAddUsageDescription: "Stencil can save generated stencil PNGs back to your photo library."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ghostline.stencil
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: Accent
+        DEVELOPMENT_ASSET_PATHS: "\"StencilApp/Resources/Preview Content\""
+        ENABLE_PREVIEWS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGNING_ALLOWED: NO
