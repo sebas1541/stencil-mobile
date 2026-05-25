@@ -19,6 +19,7 @@ struct SettingsView: View {
             }
             .padding(Spacing.xl)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Sections

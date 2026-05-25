@@ -34,6 +34,7 @@ struct EditorConfigureView: View {
             }
             .padding(Spacing.xl)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Import column
@@ -58,8 +59,14 @@ struct EditorConfigureView: View {
                 promptControlsSection
                 actionsSection
             }
-            .padding(.vertical, Spacing.xs)
+            // Vertical padding gives the bottom button's shadow breathing
+            // room; horizontal padding does the same for any tier/card
+            // shadows that bleed sideways. Combined with .scrollClipDisabled
+            // below this keeps shadows from clipping at the scroll edges.
+            .padding(.horizontal, 4)
+            .padding(.vertical, Spacing.md)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Tier (vertical cards)
@@ -144,7 +151,7 @@ struct EditorConfigureView: View {
     private var promptControlsSection: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             SectionLabel(text: "Prompt controls")
-            VStack(spacing: Spacing.sm) {
+            VStack(spacing: Spacing.md) {
                 backgroundCard
                 thicknessCard
                 shadowsCard

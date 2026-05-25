@@ -211,7 +211,10 @@ struct RefinePanel: View {
                 .padding(Spacing.lg)
                 .liquidGlassCard()
             }
+            .padding(.horizontal, 4)
+            .padding(.vertical, Spacing.sm)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Overlay sliders

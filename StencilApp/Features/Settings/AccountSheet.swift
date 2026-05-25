@@ -17,6 +17,7 @@ struct AccountSheet: View {
                 }
                 .padding(Spacing.xl)
             }
+            .scrollClipDisabled()
             .background(AppColor.primaryBackground.ignoresSafeArea())
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)

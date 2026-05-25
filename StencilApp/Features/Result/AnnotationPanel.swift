@@ -43,7 +43,10 @@ struct AnnotationPanel: View {
                     .frame(height: 480)
                 controlsColumn
             }
+            .padding(.horizontal, 4)
+            .padding(.vertical, Spacing.sm)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Layers

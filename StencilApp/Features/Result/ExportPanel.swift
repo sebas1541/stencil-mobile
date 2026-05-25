@@ -46,7 +46,10 @@ struct ExportPanel: View {
                 exportRowsColumn
                 recentColumn
             }
+            .padding(.horizontal, 4)
+            .padding(.vertical, Spacing.sm)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Preview column
