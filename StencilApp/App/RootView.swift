@@ -70,6 +70,9 @@ struct RootView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .stencilInjectMockGenerating)) { _ in
+            editorViewModel.injectMockGenerating()
+        }
 #endif
     }
 

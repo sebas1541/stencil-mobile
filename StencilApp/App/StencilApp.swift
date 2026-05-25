@@ -12,14 +12,23 @@ struct StencilApp: App {
                 // run loop. Lets the simulator showcase Refine / Annotate /
                 // Export without a real microservice.
                 .task {
-                    let shouldMock = ProcessInfo.processInfo.arguments.contains("--mock-result")
-                        || ProcessInfo.processInfo.environment["STENCIL_MOCK_RESULT"] == "1"
-                    guard shouldMock else { return }
+                    let args = ProcessInfo.processInfo.arguments
+                    let env = ProcessInfo.processInfo.environment
+
+                    let shouldMockResult = args.contains("--mock-result")
+                        || env["STENCIL_MOCK_RESULT"] == "1"
+                    let shouldMockGenerating = args.contains("--mock-generating")
+                        || env["STENCIL_MOCK_GENERATING"] == "1"
+
+                    guard shouldMockResult || shouldMockGenerating else { return }
                     try? await Task.sleep(nanoseconds: 200_000_000)
                     await MainActor.run {
-                        // Find the EditorViewModel via a notification — the
-                        // RootView listens and forwards to its view model.
-                        NotificationCenter.default.post(name: .stencilInjectMock, object: nil)
+                        if shouldMockGenerating {
+                            NotificationCenter.default.post(name: .stencilInjectMockGenerating, object: nil)
+                        }
+                        if shouldMockResult {
+                            NotificationCenter.default.post(name: .stencilInjectMock, object: nil)
+                        }
                     }
                 }
 #endif
@@ -29,4 +38,5 @@ struct StencilApp: App {
 
 extension Notification.Name {
     static let stencilInjectMock = Notification.Name("stencil.debug.injectMockResult")
+    static let stencilInjectMockGenerating = Notification.Name("stencil.debug.injectMockGenerating")
 }

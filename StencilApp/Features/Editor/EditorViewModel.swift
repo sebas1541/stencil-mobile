@@ -187,6 +187,13 @@ final class EditorViewModel {
     }
 
 #if DEBUG
+    /// DEBUG-only: force the .generating phase so the loading screen can be
+    /// screenshotted without doing a real round trip. Triggered by the
+    /// `--mock-generating` launch arg in StencilApp.swift.
+    func injectMockGenerating() {
+        phase = .generating
+    }
+
     /// DEBUG-only: skip the real network round trip and pretend the API
     /// returned a stencil. Uses the loaded photo if available; otherwise
     /// generates a procedural placeholder so the rest of the UI is reachable
