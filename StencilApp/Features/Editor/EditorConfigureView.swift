@@ -307,7 +307,10 @@ struct EditorConfigureView: View {
                     .padding(.vertical, Spacing.md)
             }
             .keyboardShortcut("t", modifiers: [.command])
-            .liquidGlassButton(.subtle)
+            // Per Apple HIG: "Secondary actions should use standard buttons
+            // or tinted fills in the content layer, not extra glass." Only
+            // the primary "Generate stencil" gets `.glassProminent`.
+            .buttonStyle(.bordered)
             .disabled(!viewModel.canGenerate || !viewModel.parameters.tier.supportsTechnicalTrace)
 
             if !viewModel.parameters.tier.supportsTechnicalTrace {

@@ -126,83 +126,20 @@ struct TopToolbar: View {
         }
     }
 
-    /// Apple-style segmented picker. The selected indicator is a Liquid Glass
-    /// pill that *slides* between segments via `matchedGeometryEffect`, the
-    /// way Apple does it in the App Store / Maps / Calendar headers (iOS 26).
-    ///
-    /// Text colour stays `.primary` for every segment — selection is
-    /// communicated by the glass pill behind the selected label, not by
-    /// recolouring the text.
-    @Namespace private var selectionNamespace
-
+    /// System `Picker(.segmented)` — on iPadOS 26 this control automatically
+    /// adopts Liquid Glass, including the sliding pill, the correct spring
+    /// motion, and adaptive label colours. Apple's design sessions
+    /// explicitly say "you get the correct motion only by using the system
+    /// control and not overriding its animation" — so the previous custom
+    /// matchedGeometryEffect pill is gone.
     private var sectionPicker: some View {
-        HStack(spacing: 2) {
+        Picker("Section", selection: $selectedSection) {
             ForEach(AppSection.allCases) { section in
-                Button {
-                    // Spring matches Apple's stock segmented control feel.
-                    withAnimation(.spring(response: 0.32, dampingFraction: 0.78)) {
-                        selectedSection = section
-                    }
-                } label: {
-                    Text(section.displayName)
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                        .fixedSize(horizontal: true, vertical: false)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 7)
-                        .contentShape(Capsule())
-                        .background(alignment: .center) {
-                            if selectedSection == section {
-                                selectedPill
-                                    .matchedGeometryEffect(
-                                        id: "section.selected",
-                                        in: selectionNamespace
-                                    )
-                            }
-                        }
-                }
-                .buttonStyle(.plain)
+                Text(section.displayName).tag(section)
             }
         }
-        .padding(3)
-        .background(trackBackground)
+        .pickerStyle(.segmented)
         .fixedSize(horizontal: true, vertical: false)
-    }
-
-    /// The selected pill — opaque system-background fill with a hairline
-    /// border + soft drop shadow, so it reads as a distinct surface
-    /// floating above the translucent track. iOS 26 also overlays a
-    /// `.glassEffect` so it picks up Liquid Glass refraction.
-    @ViewBuilder
-    private var selectedPill: some View {
-        ZStack {
-            Capsule(style: .continuous)
-                .fill(Color(uiColor: .systemBackground))
-            if #available(iOS 26.0, *) {
-                Capsule(style: .continuous)
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .capsule)
-            }
-        }
-        .overlay(
-            Capsule(style: .continuous)
-                .strokeBorder(Color.black.opacity(0.05), lineWidth: 0.5)
-        )
-        .shadow(color: .black.opacity(0.08), radius: 3, x: 0, y: 1)
-    }
-
-    /// "Track" behind all segments — slightly tinted neutral so the white
-    /// pill above visibly contrasts even in light mode. Matches the App
-    /// Store header treatment.
-    @ViewBuilder
-    private var trackBackground: some View {
-        Capsule(style: .continuous)
-            .fill(Color.black.opacity(0.06))
-            .overlay(
-                Capsule(style: .continuous)
-                    .strokeBorder(Color.black.opacity(0.04), lineWidth: 0.5)
-            )
     }
 
     private var rightGroup: some View {

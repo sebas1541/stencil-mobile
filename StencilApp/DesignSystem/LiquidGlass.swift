@@ -175,16 +175,21 @@ struct LiquidGlassButtonStyle: ViewModifier {
     let kind: GlassButtonKind
 
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            switch kind {
-            case .prominent: content.buttonStyle(.glassProminent)
-            case .subtle:    content.buttonStyle(.glass)
+        switch kind {
+        case .prominent:
+            // Primary action — Apple recommends .glassProminent for the one
+            // primary action per screen state, even in the content layer.
+            if #available(iOS 26.0, *) {
+                content.buttonStyle(.glassProminent)
+            } else {
+                content.buttonStyle(.borderedProminent)
             }
-        } else {
-            switch kind {
-            case .prominent: content.buttonStyle(.borderedProminent)
-            case .subtle:    content.buttonStyle(.bordered)
-            }
+        case .subtle:
+            // Secondary actions live in the content layer and per Apple HIG
+            // should be standard bordered buttons, NOT extra Liquid Glass.
+            // We deliberately drop the iOS 26 `.glass` mapping that was
+            // here previously.
+            content.buttonStyle(.bordered)
         }
     }
 }
