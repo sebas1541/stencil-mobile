@@ -10,6 +10,7 @@ struct ResultView: View {
     @State private var viewModel: RetouchViewModel
     @State private var loadError: String?
     @State private var selectedTab: ResultTab = .retouch
+    @State private var showInspector: Bool = false
 
     enum ResultTab: String, Hashable, Identifiable, CaseIterable {
         case retouch, overlay, export
@@ -49,6 +50,25 @@ struct ResultView: View {
             .padding(Spacing.xl)
         }
         .task { await loadStencil() }
+        .toolbar { inspectorToolbar }
+        .inspector(isPresented: $showInspector) {
+            ResultInspector(response: response)
+                .inspectorColumnWidth(min: 280, ideal: 320, max: 420)
+        }
+    }
+
+    @ToolbarContentBuilder
+    private var inspectorToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                showInspector.toggle()
+            } label: {
+                Image(systemName: showInspector
+                      ? "sidebar.right"
+                      : "info.circle")
+            }
+            .accessibilityLabel("Toggle details")
+        }
     }
 
     // MARK: - Header
@@ -66,6 +86,7 @@ struct ResultView: View {
             Button(action: onBack) {
                 Label("New stencil", systemImage: "arrow.uturn.backward")
             }
+            .keyboardShortcut("n", modifiers: [.command])
             .liquidGlassButton(.subtle)
         }
     }

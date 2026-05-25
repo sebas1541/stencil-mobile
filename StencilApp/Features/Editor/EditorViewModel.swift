@@ -46,6 +46,16 @@ final class EditorViewModel {
         CostTable.label(tier: parameters.tier, resolution: parameters.resolution)
     }
 
+    /// Mirrors the server's `resolution_warning` heuristic: low-res source +
+    /// high-res target. Lets the editor surface a hint before the round trip.
+    var shouldShowLowResolutionWarning: Bool {
+        guard let image = sourceImage else { return false }
+        let mpx = (image.size.width * image.size.height) / 1_000_000
+        return mpx < 1.0
+            && parameters.resolution == .p4K
+            && parameters.tier != .nano
+    }
+
     // MARK: - Actions
 
     /// Promote weak shadow controls when the topography toggle is enabled,

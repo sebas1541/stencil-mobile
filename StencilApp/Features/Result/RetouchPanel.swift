@@ -17,21 +17,7 @@ struct RetouchPanel: View {
     // MARK: - Preview
 
     private var preview: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-                .fill(AppColor.canvasBackground)
-            if let image = viewModel.retouchedImage ?? viewModel.stencilImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(Spacing.md)
-            } else {
-                ProgressView()
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 360)
-        .liquidGlassCard()
+        GlassImagePreview(image: viewModel.retouchedImage ?? viewModel.stencilImage)
     }
 
     // MARK: - Sliders

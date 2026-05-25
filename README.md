@@ -60,6 +60,13 @@ If you're running the microservice on your Mac and testing on a real iPad, point
 
 ## What's coming next
 
-- **Commit 2**: full client-side retouching engine (Core Image / Metal) — threshold, line thickness (dilate/erode), denoise (connected components), close gaps, smooth, sharpen, invert, line color swap; reference overlay with the three sliders.
-- **Commit 3**: exports — system PNG, transparent Procreate PNG (white → alpha).
-- **Commit 4**: polish — keyboard shortcuts, Command menu, Inspector with cost breakdown, full drag-and-drop polish.
+- **Commit 4 onward** — Procreate PSD multi-layer export once the microservice exposes `POST /procreate-layers`; local history of recent generations in the sidebar; Apple Pencil annotation on top of the stencil.
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| ⌘G | Generate stencil |
+| ⌘T | Technical Trace |
+| ⌘N | Back to setup (from Result) |
+| ⌘R | Test `/health` (from Settings) |

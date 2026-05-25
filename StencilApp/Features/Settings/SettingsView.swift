@@ -80,6 +80,7 @@ struct SettingsView: View {
                     Label("Test /health", systemImage: "wifi")
                         .frame(maxWidth: .infinity)
                 }
+                .keyboardShortcut("r", modifiers: [.command])
                 .liquidGlassButton(.subtle)
                 .disabled(isProbing)
 

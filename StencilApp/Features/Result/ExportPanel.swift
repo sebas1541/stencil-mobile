@@ -9,6 +9,7 @@ struct ExportPanel: View {
 
     @State private var shareItem: ShareItem?
     @State private var saveMessage: String?
+    @State private var pendingSave: ExportKind?
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.xl) {
@@ -26,21 +27,10 @@ struct ExportPanel: View {
     private var previewCard: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             SectionLabel(text: "Current export")
-            ZStack {
-                RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-                    .fill(AppColor.canvasBackground)
-                if let image = viewModel.retouchedImage ?? viewModel.stencilImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .padding(Spacing.md)
-                } else {
-                    ProgressView()
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 320)
-            .liquidGlassCard()
+            GlassImagePreview(
+                image: viewModel.retouchedImage ?? viewModel.stencilImage,
+                height: 320
+            )
         }
     }
 
@@ -55,19 +45,22 @@ struct ExportPanel: View {
                     title: "Original stencil (PNG)",
                     subtitle: "Provider-native bytes returned by the API, untouched.",
                     icon: "doc.on.doc",
-                    action: { share(.original) }
+                    onShare: { share(.original) },
+                    onSave:  { saveToPhotos(.original) }
                 )
                 exportRow(
                     title: "Retouched stencil (PNG)",
                     subtitle: "Current retouch settings + line colour baked in.",
                     icon: "wand.and.stars.inverse",
-                    action: { share(.retouched) }
+                    onShare: { share(.retouched) },
+                    onSave:  { saveToPhotos(.retouched) }
                 )
                 exportRow(
                     title: "Procreate transparent (PNG)",
                     subtitle: "White background turned into alpha — drop directly into Procreate layers.",
                     icon: "square.dashed.inset.filled",
-                    action: { share(.procreate) }
+                    onShare: { share(.procreate) },
+                    onSave:  { saveToPhotos(.procreate) }
                 )
             }
 
@@ -84,31 +77,41 @@ struct ExportPanel: View {
         title: String,
         subtitle: String,
         icon: String,
-        action: @escaping () -> Void
+        onShare: @escaping () -> Void,
+        onSave: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
-            HStack(spacing: Spacing.md) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundStyle(AppColor.accent)
-                    .frame(width: 32)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(AppFont.bodyEmphasis)
-                        .foregroundStyle(.primary)
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.leading)
-                }
-                Spacer()
-                Image(systemName: "square.and.arrow.up")
+        HStack(spacing: Spacing.md) {
+            Image(systemName: icon)
+                .font(.title3)
+                .foregroundStyle(AppColor.accent)
+                .frame(width: 32)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(AppFont.bodyEmphasis)
+                Text(subtitle)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
             }
-            .padding(Spacing.md)
-            .liquidGlassCard(cornerRadius: Radius.md)
+            Spacer()
+            HStack(spacing: Spacing.xs) {
+                Button(action: onSave) {
+                    Image(systemName: "square.and.arrow.down")
+                        .frame(width: 36, height: 36)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(AppColor.accent)
+
+                Button(action: onShare) {
+                    Image(systemName: "square.and.arrow.up")
+                        .frame(width: 36, height: 36)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(AppColor.accent)
+            }
         }
-        .buttonStyle(.plain)
+        .padding(Spacing.md)
+        .liquidGlassCard(cornerRadius: Radius.md)
     }
 
     // MARK: - Information card
@@ -153,6 +156,32 @@ struct ExportPanel: View {
         case .original:  return viewModel.originalStencilPNG().map { ($0, "original") }
         case .retouched: return viewModel.retouchedStencilPNG().map { ($0, "retouched") }
         case .procreate: return viewModel.procreateTransparentPNG().map { ($0, "procreate") }
+        }
+    }
+
+    // MARK: - Save to Photos
+
+    private func saveToPhotos(_ kind: ExportKind) {
+        saveMessage = nil
+        pendingSave = kind
+        guard let (data, _) = bytes(for: kind) else {
+            saveMessage = "Stencil isn't ready yet — wait a moment and try again."
+            pendingSave = nil
+            return
+        }
+        Task {
+            let result = await PhotoSaver.save(data)
+            await MainActor.run {
+                pendingSave = nil
+                switch result {
+                case .success:
+                    saveMessage = "Saved to Photos."
+                case .denied:
+                    saveMessage = "Photos access denied. Enable it in Settings → Privacy → Photos."
+                case let .failed(message):
+                    saveMessage = "Error saving to Photos: \(message)"
+                }
+            }
         }
     }
 }

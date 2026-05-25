@@ -203,6 +203,7 @@ struct EditorConfigureView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.sm)
             }
+            .keyboardShortcut("g", modifiers: [.command])
             .liquidGlassButton(.prominent)
             .disabled(!viewModel.canGenerate)
 
@@ -213,6 +214,7 @@ struct EditorConfigureView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, Spacing.sm)
             }
+            .keyboardShortcut("t", modifiers: [.command])
             .liquidGlassButton(.subtle)
             .disabled(!viewModel.canGenerate || !viewModel.parameters.tier.supportsTechnicalTrace)
 
@@ -221,6 +223,14 @@ struct EditorConfigureView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+            }
+
+            if viewModel.shouldShowLowResolutionWarning {
+                Label("Heads up: at 4K the source image is going to look soft.",
+                      systemImage: "exclamationmark.triangle")
+                    .font(.caption)
+                    .foregroundStyle(AppColor.danger)
+                    .padding(.top, Spacing.xs)
             }
         }
     }

@@ -16,6 +16,7 @@ struct ImportCardView: View {
     var body: some View {
         VStack(spacing: Spacing.md) {
             preview
+            metadata
             controls
             if let loadError {
                 Text(loadError)
@@ -28,6 +29,30 @@ struct ImportCardView: View {
         .onChange(of: photoItem) { _, newItem in
             guard let newItem else { return }
             Task { await load(item: newItem) }
+        }
+    }
+
+    @ViewBuilder
+    private var metadata: some View {
+        if let image = selectedImage {
+            HStack(spacing: Spacing.sm) {
+                Image(systemName: "photo")
+                    .foregroundStyle(.secondary)
+                if let name = selectedFilename, !name.isEmpty {
+                    Text(name)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                }
+                Spacer()
+                Text(String(format: "%.0f × %.0f · %.2f Mpx",
+                            image.size.width,
+                            image.size.height,
+                            (image.size.width * image.size.height) / 1_000_000))
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
+            }
+            .font(.caption)
+            .foregroundStyle(.primary)
         }
     }
 

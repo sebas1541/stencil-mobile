@@ -13,21 +13,7 @@ struct OverlayPanel: View {
     }
 
     private var preview: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-                .fill(AppColor.canvasBackground)
-            if let image = viewModel.overlayImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(Spacing.md)
-            } else {
-                ProgressView()
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 420)
-        .liquidGlassCard()
+        GlassImagePreview(image: viewModel.overlayImage, height: 420)
     }
 
     private var sliders: some View {

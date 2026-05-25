@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Stencil can save generated stencil PNGs back to your photo library.</string>
+	<string>Stencil saves generated stencil PNGs back to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Stencil needs access to your photos to load reference images for tattoo stencil generation.</string>
 	<key>UILaunchScreen</key>

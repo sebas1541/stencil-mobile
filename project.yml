@@ -57,7 +57,7 @@ targets:
         UIRequiresFullScreen: false
         ITSAppUsesNonExemptEncryption: false
         NSPhotoLibraryUsageDescription: "Stencil needs access to your photos to load reference images for tattoo stencil generation."
-        NSPhotoLibraryAddUsageDescription: "Stencil can save generated stencil PNGs back to your photo library."
+        NSPhotoLibraryAddUsageDescription: "Stencil saves generated stencil PNGs back to your photo library."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ghostline.stencil
