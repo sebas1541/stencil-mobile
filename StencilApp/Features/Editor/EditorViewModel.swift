@@ -128,13 +128,26 @@ final class EditorViewModel {
             return
         }
 
-        guard let data = image.jpegData(compressionQuality: 0.92) ?? image.pngData() else {
+        // Encode as JPEG (smaller, server accepts it). Fall back to PNG only
+        // if JPEG encoding ever fails — and adjust the filename so the
+        // server-side mimetypes.guess_type() returns the right content type.
+        let encoded: (data: Data, ext: String)
+        if let jpeg = image.jpegData(compressionQuality: 0.92) {
+            encoded = (jpeg, "jpg")
+        } else if let png = image.pngData() {
+            encoded = (png, "png")
+        } else {
             phase = .failed("Could not encode the source image.")
             return
         }
 
         phase = .generating
-        let filename = sourceFilename ?? "reference.jpg"
+        // The server uses the filename ONLY to derive the Content-Type via
+        // mimetypes.guess_type(). PhotosPickerItem.itemIdentifier is a local
+        // identifier like "8F3D2A4E.../L0/001" with no extension, so we
+        // override with a consistent filename matching the bytes we encoded.
+        let filename = "reference.\(encoded.ext)"
+        let data = encoded.data
         let parameters = self.parameters
 
         Task { [service, history] in
