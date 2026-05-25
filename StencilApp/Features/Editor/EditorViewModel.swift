@@ -29,6 +29,10 @@ final class EditorViewModel {
     // Flow state
     var phase: EditorPhase = .configure
 
+    /// Created when a generation succeeds. Shared across Refine / Annotate /
+    /// Export so the user can flip between sections without losing state.
+    var retouchViewModel: RetouchViewModel?
+
     // Services
     private let service: StencilService
     private let history: HistoryStore
@@ -142,6 +146,7 @@ final class EditorViewModel {
                 )
                 await MainActor.run {
                     history.record(parameters: parameters, response: response)
+                    self.retouchViewModel = RetouchViewModel(referenceImage: image)
                     self.phase = .result(response, sourcePreview: image)
                 }
             } catch {
@@ -154,6 +159,17 @@ final class EditorViewModel {
     }
 
     func backToConfigure() {
+        phase = .configure
+        retouchViewModel = nil
+    }
+
+    /// Hard reset: clears the loaded image, parameters stay so the user can
+    /// quickly re-run with another photo.
+    func startOver() {
+        sourceImage = nil
+        sourceFilename = nil
+        retouchViewModel = nil
+        parameters.requestId = UUID()
         phase = .configure
     }
 }

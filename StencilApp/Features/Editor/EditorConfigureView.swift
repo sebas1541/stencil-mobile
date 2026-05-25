@@ -1,99 +1,138 @@
 import SwiftUI
 
-/// The main "set up your stencil" form. All controls hang off `viewModel`.
+/// Configure-and-generate form, redesigned as a two-column iPad layout so the
+/// import card can breathe and the configuration column can show tier cards
+/// without truncating.
 struct EditorConfigureView: View {
     @Bindable var viewModel: EditorViewModel
 
     var body: some View {
+        ViewThatFits(in: .horizontal) {
+            twoColumnLayout
+            stackedLayout
+        }
+    }
+
+    // MARK: - Layouts
+
+    private var twoColumnLayout: some View {
+        HStack(alignment: .top, spacing: Spacing.xl) {
+            importColumn
+                .frame(minWidth: 360, idealWidth: 460, maxWidth: 520)
+
+            configColumn
+                .frame(maxWidth: .infinity)
+        }
+        .padding(Spacing.xl)
+    }
+
+    private var stackedLayout: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.xl) {
-                ImportCardView(
-                    selectedImage: $viewModel.sourceImage,
-                    selectedFilename: $viewModel.sourceFilename
-                )
-
-                tierSection
-                styleAndResolutionSection
-                promptControlsSection
-                actionsSection
+                importColumn
+                configColumn
             }
             .padding(Spacing.xl)
         }
     }
 
-    // MARK: - Tier
+    // MARK: - Import column
+
+    private var importColumn: some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            SectionLabel(text: "Reference image")
+            ImportCardView(
+                selectedImage: $viewModel.sourceImage,
+                selectedFilename: $viewModel.sourceFilename
+            )
+        }
+    }
+
+    // MARK: - Config column
+
+    private var configColumn: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: Spacing.xl) {
+                tierSection
+                styleAndResolutionRow
+                promptControlsSection
+                actionsSection
+            }
+            .padding(.vertical, Spacing.xs)
+        }
+    }
+
+    // MARK: - Tier (vertical cards)
 
     private var tierSection: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
+        VStack(alignment: .leading, spacing: Spacing.md) {
             SectionLabel(text: "Processing tier")
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Spacing.md) {
-                    ForEach(ModelTier.allCases) { tier in
-                        TierChip(
-                            tier: tier,
-                            isSelected: viewModel.parameters.tier == tier
-                        ) {
-                            viewModel.parameters.tier = tier
-                            viewModel.onTierChanged()
-                        }
+            let columns = [GridItem(.adaptive(minimum: 220), spacing: Spacing.md)]
+            LazyVGrid(columns: columns, alignment: .leading, spacing: Spacing.md) {
+                ForEach(ModelTier.allCases) { tier in
+                    TierCard(
+                        tier: tier,
+                        isSelected: viewModel.parameters.tier == tier
+                    ) {
+                        viewModel.parameters.tier = tier
+                        viewModel.onTierChanged()
                     }
                 }
-                .padding(.horizontal, 2)
             }
             Text(viewModel.costLabel)
-                .font(.footnote)
+                .font(.footnote.monospacedDigit())
                 .foregroundStyle(.secondary)
         }
     }
 
     // MARK: - Style + resolution
 
-    private var styleAndResolutionSection: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            HStack(alignment: .top, spacing: Spacing.xl) {
-                VStack(alignment: .leading, spacing: Spacing.sm) {
-                    SectionLabel(text: "Tattoo style")
-                    Menu {
-                        ForEach(StyleName.allCases) { style in
-                            Button {
-                                viewModel.parameters.estilo = style
-                            } label: {
-                                if viewModel.parameters.estilo == style {
-                                    Label(style.displayName, systemImage: "checkmark")
-                                } else {
-                                    Text(style.displayName)
-                                }
+    private var styleAndResolutionRow: some View {
+        HStack(alignment: .top, spacing: Spacing.xl) {
+            VStack(alignment: .leading, spacing: Spacing.sm) {
+                SectionLabel(text: "Tattoo style")
+                Menu {
+                    ForEach(StyleName.allCases) { style in
+                        Button {
+                            viewModel.parameters.estilo = style
+                        } label: {
+                            if viewModel.parameters.estilo == style {
+                                Label(style.displayName, systemImage: "checkmark")
+                            } else {
+                                Text(style.displayName)
                             }
                         }
-                    } label: {
-                        HStack {
-                            Text(viewModel.parameters.estilo.displayName)
-                                .font(AppFont.bodyEmphasis)
-                            Spacer()
-                            Image(systemName: "chevron.up.chevron.down")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.horizontal, Spacing.lg)
-                        .padding(.vertical, Spacing.md)
-                        .frame(maxWidth: .infinity)
-                        .liquidGlassCard(cornerRadius: Radius.md)
                     }
-                }
-
-                VStack(alignment: .leading, spacing: Spacing.sm) {
-                    SectionLabel(text: "Export resolution")
-                    Picker("Resolution", selection: $viewModel.parameters.resolution) {
-                        ForEach(Resolution.allCases) { res in
-                            Text(res.displayName).tag(res)
-                        }
+                } label: {
+                    HStack {
+                        Text(viewModel.parameters.estilo.displayName)
+                            .font(AppFont.bodyEmphasis)
+                        Spacer()
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
-                    .pickerStyle(.segmented)
-                    Text(viewModel.parameters.resolution.pixelDescription)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    .padding(.horizontal, Spacing.lg)
+                    .padding(.vertical, Spacing.md)
+                    .frame(maxWidth: .infinity)
+                    .liquidGlassCard(cornerRadius: Radius.md)
                 }
             }
+            .frame(maxWidth: .infinity)
+
+            VStack(alignment: .leading, spacing: Spacing.sm) {
+                SectionLabel(text: "Export resolution")
+                Picker("Resolution", selection: $viewModel.parameters.resolution) {
+                    ForEach(Resolution.allCases) { res in
+                        Text(res.displayName).tag(res)
+                    }
+                }
+                .pickerStyle(.segmented)
+                Text(viewModel.parameters.resolution.pixelDescription)
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 
@@ -102,7 +141,6 @@ struct EditorConfigureView: View {
     private var promptControlsSection: some View {
         VStack(alignment: .leading, spacing: Spacing.md) {
             SectionLabel(text: "Prompt controls")
-
             VStack(alignment: .leading, spacing: Spacing.md) {
                 Toggle(isOn: $viewModel.parameters.promptConfig.uiBackground) {
                     VStack(alignment: .leading) {
@@ -195,13 +233,13 @@ struct EditorConfigureView: View {
     // MARK: - Generate buttons
 
     private var actionsSection: some View {
-        VStack(spacing: Spacing.md) {
+        VStack(spacing: Spacing.sm) {
             Button {
                 viewModel.generate(promptMode: .standard)
             } label: {
                 Label("Generate stencil", systemImage: "wand.and.stars")
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.sm)
+                    .padding(.vertical, Spacing.md)
             }
             .keyboardShortcut("g", modifiers: [.command])
             .liquidGlassButton(.prominent)
@@ -212,7 +250,7 @@ struct EditorConfigureView: View {
             } label: {
                 Label("Technical trace", systemImage: "square.dashed")
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, Spacing.sm)
+                    .padding(.vertical, Spacing.md)
             }
             .keyboardShortcut("t", modifiers: [.command])
             .liquidGlassButton(.subtle)
@@ -226,7 +264,7 @@ struct EditorConfigureView: View {
             }
 
             if viewModel.shouldShowLowResolutionWarning {
-                Label("Heads up: at 4K the source image is going to look soft.",
+                Label("Heads up: at 4K this source will look soft.",
                       systemImage: "exclamationmark.triangle")
                     .font(.caption)
                     .foregroundStyle(AppColor.danger)
@@ -236,23 +274,27 @@ struct EditorConfigureView: View {
     }
 }
 
-// MARK: - Tier chip
+// MARK: - Tier card
 
-private struct TierChip: View {
+private struct TierCard: View {
     let tier: ModelTier
     let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Spacing.xs) {
                 HStack(spacing: 6) {
                     Image(systemName: tier.isLocal ? "cpu" : "sparkles")
-                        .font(.caption)
+                        .font(.callout)
                         .foregroundStyle(isSelected ? AppColor.accent : .secondary)
                     Text(tier.displayName)
                         .font(AppFont.bodyEmphasis)
-                        .foregroundStyle(.primary)
+                    Spacer()
+                    if isSelected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(AppColor.accent)
+                    }
                 }
                 Text(tier.subtitle)
                     .font(.caption2)
@@ -261,7 +303,7 @@ private struct TierChip: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(Spacing.md)
-            .frame(width: 200, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .liquidGlassChip(
                 tint: isSelected ? AppColor.accent : nil,
                 prominent: isSelected

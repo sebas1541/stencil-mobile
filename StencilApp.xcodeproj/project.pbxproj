@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01A58492C73171BC129DBCE7 /* RetouchPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A910021E7DC0303D41BA034 /* RetouchPanel.swift */; };
-		0773FBC7A020E28D8C626B20 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A9B2D7A258DB833B0812EC /* ResultView.swift */; };
 		0BD324D3C5DC7C719DCDEF5D /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1D568C0003D046223E9AD1 /* Models.swift */; };
 		107B2D3857CF584F5CBE4114 /* EditorConfigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13427F4766950F5CF94613CF /* EditorConfigureView.swift */; };
 		1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */; };
@@ -16,10 +14,11 @@
 		2144A6A5160CB1B77AC38546 /* HistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1C66987BD0F4C3351B92FE /* HistoryStoreTests.swift */; };
 		21E628D587458D7DC2ACA37F /* ProcreateExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CAB6DBBFFFE041BA7B62FB /* ProcreateExporter.swift */; };
 		3063645457D32C1CA0053C31 /* AnnotationCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */; };
-		337ED87506BA32A89114CB0C /* ResultInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5979422A27F3132256FB8E08 /* ResultInspector.swift */; };
 		373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */; };
 		392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BA6147DB48E5105E768685 /* StencilApp.swift */; };
 		40017ACDDB15867B840882D6 /* ExportPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C114628842C93253ADCED5D1 /* ExportPanel.swift */; };
+		47A7D439C7C99BC96EF462F0 /* RecentMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD113FB7145AEF8E81586C9 /* RecentMenu.swift */; };
+		4EDE30E21F679C3E7B60C4D4 /* AvatarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273173282FB1FA7C245778B5 /* AvatarButton.swift */; };
 		506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6584295EA58EC9F710A918D5 /* LiquidGlass.swift */; };
 		549F6F232C5C6299528F073C /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59882D59670F94468F4BAE6 /* HistoryStore.swift */; };
 		586C3C53F0E6EBF55C30ECFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */; };
@@ -27,18 +26,23 @@
 		599FE748A8B890768D13F772 /* RetouchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906FBC7690ED1528B734D286 /* RetouchEngine.swift */; };
 		679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FFC516AFD5A75C384F8E91 /* StencilService.swift */; };
 		75F67EC90899CE1FE8934F32 /* StencilParametersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8E57973E7F9BEC8407D49A /* StencilParametersTests.swift */; };
+		76A12520BD8515DE244F2A0F /* AccountSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB1C69FF36F02EA548BCC8D /* AccountSheet.swift */; };
+		7E5CF0816B7CA16FA2CA862A /* GlobalSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C650615037F2ACEB786140 /* GlobalSearchField.swift */; };
+		8600B09A7D9A69948015E08C /* AppSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BFB9B57C8A03B22240B1F7 /* AppSection.swift */; };
 		8DF68D71318DD972B6DE384A /* GlassImagePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E1AA8649F9DFF81330FF95 /* GlassImagePreview.swift */; };
 		96698DB63DD2E34F4BA9D789 /* AnnotationPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB3104441BFAD0353B9E0AC9 /* AnnotationPanel.swift */; };
+		9A2C6CA4A3A434BABE6FEA54 /* ComparisonImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8DC706D55922A25087AF63 /* ComparisonImageView.swift */; };
 		C0A7CCEC473B73D5E4409046 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 337B6679F44A61713A6BC34A /* Assets.xcassets */; };
 		C55640736316E4F0A01FAAC0 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB23F44F6280A760D826D4EA /* PhotoSaver.swift */; };
 		C6D68A91F6531717A6CD26F5 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F92A57A0E4BD698140422353 /* RootView.swift */; };
+		D00FEF4F3F48F4ABA046D044 /* TopToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD19DC78FB2FC71CE2492FE0 /* TopToolbar.swift */; };
 		D1BE56773BFD431FF28B1DCE /* OverlayCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CFC722DC78B1C6C95FEAD4 /* OverlayCompositor.swift */; };
 		D29E13CC67B4F7823AACFCAD /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15B25D4E60243F8B3B00102 /* Colors.swift */; };
 		D78B975A3707D58E6CC8D6A8 /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1623427F321532C9378F1E32 /* ZoomableImageView.swift */; };
-		D79EFC8FDB2A07FD5D95380F /* OverlayPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B14FFA46CE9CDF3AC7A04D7 /* OverlayPanel.swift */; };
 		E6E2A21BCADB83E52DE87548 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A70ACF4922A957084C16C93 /* APIClient.swift */; };
 		EA4F56B0A7A56ECD9D392EA2 /* EditorContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92263B2A331905F82EE70E5A /* EditorContainerView.swift */; };
 		EA75FC065E8180AE6C7C1BA8 /* ProcreateExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA1BD3F88D17781D7BB3E8 /* ProcreateExporterTests.swift */; };
+		EDB99BA20C197507DB1CB9EB /* RefinePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A129E5A091371F427F46ED51 /* RefinePanel.swift */; };
 		FBD6E38637BE9E57CD2F8B2B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACF18EDE0E882BF43248A5C /* Theme.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,18 +59,18 @@
 /* Begin PBXFileReference section */
 		01CAB6DBBFFFE041BA7B62FB /* ProcreateExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcreateExporter.swift; sourceTree = "<group>"; };
 		0A1C66987BD0F4C3351B92FE /* HistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStoreTests.swift; sourceTree = "<group>"; };
+		0E8DC706D55922A25087AF63 /* ComparisonImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparisonImageView.swift; sourceTree = "<group>"; };
 		13427F4766950F5CF94613CF /* EditorConfigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorConfigureView.swift; sourceTree = "<group>"; };
 		1623427F321532C9378F1E32 /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
-		1A910021E7DC0303D41BA034 /* RetouchPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetouchPanel.swift; sourceTree = "<group>"; };
+		17C650615037F2ACEB786140 /* GlobalSearchField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchField.swift; sourceTree = "<group>"; };
 		21E1AA8649F9DFF81330FF95 /* GlassImagePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassImagePreview.swift; sourceTree = "<group>"; };
 		24EC27DC4FAE911B5EA2328A /* ImportCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportCardView.swift; sourceTree = "<group>"; };
+		273173282FB1FA7C245778B5 /* AvatarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarButton.swift; sourceTree = "<group>"; };
 		2ACF18EDE0E882BF43248A5C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		2B14FFA46CE9CDF3AC7A04D7 /* OverlayPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPanel.swift; sourceTree = "<group>"; };
 		2B1E2C7B508E0525BE863D60 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
+		2BB1C69FF36F02EA548BCC8D /* AccountSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSheet.swift; sourceTree = "<group>"; };
 		337B6679F44A61713A6BC34A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		54A9B2D7A258DB833B0812EC /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
-		5979422A27F3132256FB8E08 /* ResultInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultInspector.swift; sourceTree = "<group>"; };
 		5C1D568C0003D046223E9AD1 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		5D9B1B6D6779A91AD1557285 /* RetouchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetouchViewModel.swift; sourceTree = "<group>"; };
 		5DEE08399FF8DFB0D0BC55A2 /* ModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsTests.swift; sourceTree = "<group>"; };
@@ -77,7 +81,11 @@
 		906FBC7690ED1528B734D286 /* RetouchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetouchEngine.swift; sourceTree = "<group>"; };
 		92263B2A331905F82EE70E5A /* EditorContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorContainerView.swift; sourceTree = "<group>"; };
 		9BEA1BD3F88D17781D7BB3E8 /* ProcreateExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcreateExporterTests.swift; sourceTree = "<group>"; };
+		A129E5A091371F427F46ED51 /* RefinePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefinePanel.swift; sourceTree = "<group>"; };
+		A1BFB9B57C8A03B22240B1F7 /* AppSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSection.swift; sourceTree = "<group>"; };
 		A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationCanvas.swift; sourceTree = "<group>"; };
+		BBD113FB7145AEF8E81586C9 /* RecentMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMenu.swift; sourceTree = "<group>"; };
+		BD19DC78FB2FC71CE2492FE0 /* TopToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopToolbar.swift; sourceTree = "<group>"; };
 		C114628842C93253ADCED5D1 /* ExportPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPanel.swift; sourceTree = "<group>"; };
 		C8FFC516AFD5A75C384F8E91 /* StencilService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StencilService.swift; sourceTree = "<group>"; };
 		D15B25D4E60243F8B3B00102 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -105,6 +113,7 @@
 		0B4AAE8F424FEDB84D5C0DB6 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				A1BFB9B57C8A03B22240B1F7 /* AppSection.swift */,
 				F92A57A0E4BD698140422353 /* RootView.swift */,
 				D5BA6147DB48E5105E768685 /* StencilApp.swift */,
 			);
@@ -154,10 +163,14 @@
 		79D961BBCF51D0E4AF07E1B2 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				273173282FB1FA7C245778B5 /* AvatarButton.swift */,
 				D15B25D4E60243F8B3B00102 /* Colors.swift */,
 				21E1AA8649F9DFF81330FF95 /* GlassImagePreview.swift */,
+				17C650615037F2ACEB786140 /* GlobalSearchField.swift */,
 				6584295EA58EC9F710A918D5 /* LiquidGlass.swift */,
+				BBD113FB7145AEF8E81586C9 /* RecentMenu.swift */,
 				2ACF18EDE0E882BF43248A5C /* Theme.swift */,
+				BD19DC78FB2FC71CE2492FE0 /* TopToolbar.swift */,
 				1623427F321532C9378F1E32 /* ZoomableImageView.swift */,
 			);
 			path = DesignSystem;
@@ -220,11 +233,9 @@
 			children = (
 				A3FE0B9242E70F7230616E64 /* AnnotationCanvas.swift */,
 				FB3104441BFAD0353B9E0AC9 /* AnnotationPanel.swift */,
+				0E8DC706D55922A25087AF63 /* ComparisonImageView.swift */,
 				C114628842C93253ADCED5D1 /* ExportPanel.swift */,
-				2B14FFA46CE9CDF3AC7A04D7 /* OverlayPanel.swift */,
-				5979422A27F3132256FB8E08 /* ResultInspector.swift */,
-				54A9B2D7A258DB833B0812EC /* ResultView.swift */,
-				1A910021E7DC0303D41BA034 /* RetouchPanel.swift */,
+				A129E5A091371F427F46ED51 /* RefinePanel.swift */,
 				5D9B1B6D6779A91AD1557285 /* RetouchViewModel.swift */,
 			);
 			path = Result;
@@ -233,6 +244,7 @@
 		F9227092795ED74CD2A62521 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				2BB1C69FF36F02EA548BCC8D /* AccountSheet.swift */,
 				35AFC1FDCC3D118BBB93B363 /* SettingsView.swift */,
 			);
 			path = Settings;
@@ -331,32 +343,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6E2A21BCADB83E52DE87548 /* APIClient.swift in Sources */,
+				76A12520BD8515DE244F2A0F /* AccountSheet.swift in Sources */,
 				3063645457D32C1CA0053C31 /* AnnotationCanvas.swift in Sources */,
 				96698DB63DD2E34F4BA9D789 /* AnnotationPanel.swift in Sources */,
+				8600B09A7D9A69948015E08C /* AppSection.swift in Sources */,
+				4EDE30E21F679C3E7B60C4D4 /* AvatarButton.swift in Sources */,
 				D29E13CC67B4F7823AACFCAD /* Colors.swift in Sources */,
+				9A2C6CA4A3A434BABE6FEA54 /* ComparisonImageView.swift in Sources */,
 				107B2D3857CF584F5CBE4114 /* EditorConfigureView.swift in Sources */,
 				EA4F56B0A7A56ECD9D392EA2 /* EditorContainerView.swift in Sources */,
 				373B8675A9860A86E14687C0 /* EditorViewModel.swift in Sources */,
 				40017ACDDB15867B840882D6 /* ExportPanel.swift in Sources */,
 				8DF68D71318DD972B6DE384A /* GlassImagePreview.swift in Sources */,
+				7E5CF0816B7CA16FA2CA862A /* GlobalSearchField.swift in Sources */,
 				549F6F232C5C6299528F073C /* HistoryStore.swift in Sources */,
 				1795A499FED22E2A7EA4A39F /* ImportCardView.swift in Sources */,
 				506358FDC43C54D9CFD04FCA /* LiquidGlass.swift in Sources */,
 				0BD324D3C5DC7C719DCDEF5D /* Models.swift in Sources */,
 				D1BE56773BFD431FF28B1DCE /* OverlayCompositor.swift in Sources */,
-				D79EFC8FDB2A07FD5D95380F /* OverlayPanel.swift in Sources */,
 				C55640736316E4F0A01FAAC0 /* PhotoSaver.swift in Sources */,
 				21E628D587458D7DC2ACA37F /* ProcreateExporter.swift in Sources */,
-				337ED87506BA32A89114CB0C /* ResultInspector.swift in Sources */,
-				0773FBC7A020E28D8C626B20 /* ResultView.swift in Sources */,
+				47A7D439C7C99BC96EF462F0 /* RecentMenu.swift in Sources */,
+				EDB99BA20C197507DB1CB9EB /* RefinePanel.swift in Sources */,
 				599FE748A8B890768D13F772 /* RetouchEngine.swift in Sources */,
-				01A58492C73171BC129DBCE7 /* RetouchPanel.swift in Sources */,
 				1D9070B78C649E0EF7D5F8B0 /* RetouchViewModel.swift in Sources */,
 				C6D68A91F6531717A6CD26F5 /* RootView.swift in Sources */,
 				586C3C53F0E6EBF55C30ECFB /* SettingsView.swift in Sources */,
 				392F7773DA8CAD456EEACAD3 /* StencilApp.swift in Sources */,
 				679B2CDBBEDA11DD16C75C5D /* StencilService.swift in Sources */,
 				FBD6E38637BE9E57CD2F8B2B /* Theme.swift in Sources */,
+				D00FEF4F3F48F4ABA046D044 /* TopToolbar.swift in Sources */,
 				D78B975A3707D58E6CC8D6A8 /* ZoomableImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

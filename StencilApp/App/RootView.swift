@@ -1,131 +1,145 @@
 import SwiftUI
 
-/// Side-bar driven shell. Collapses automatically to a navigation stack on
-/// compact width (iPhone), shows a two-column split on iPad.
+/// Top-level shell. Drops the old `NavigationSplitView` sidebar in favour of
+/// a Calendar-style top toolbar that switches between four sections.
+///
+/// `EditorViewModel` owns both the configure pipeline AND the post-result
+/// `RetouchViewModel`. That way RootView is a thin router — no `onChange`
+/// gymnastics needed.
 struct RootView: View {
-    enum SidebarItem: Hashable {
-        case newStencil
-        case settings
-    }
+    @State private var selectedSection: AppSection = .generate
+    @State private var searchQuery: String = ""
+    @State private var isAccountPresented: Bool = false
 
-    @State private var selection: SidebarItem? = .newStencil
-    @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
-
-    /// Owned at the shell level so a sidebar tap on a history row can mutate
-    /// the editor form before switching to the Editor pane.
     @State private var editorViewModel = EditorViewModel()
     @State private var history = HistoryStore.shared
 
     var body: some View {
-        NavigationSplitView(columnVisibility: $columnVisibility) {
-            sidebar
-                .navigationTitle("Stencil")
-        } detail: {
-            detail
-        }
-        .navigationSplitViewStyle(.balanced)
-    }
+        ZStack(alignment: .top) {
+            AppColor.primaryBackground.ignoresSafeArea()
 
-    // MARK: - Sidebar
+            VStack(spacing: 0) {
+                TopToolbar(
+                    selectedSection: $selectedSection,
+                    searchQuery: $searchQuery,
+                    isResultReady: editorViewModel.retouchViewModel != nil,
+                    history: history,
+                    onNew: handleNew,
+                    onPickHistory: handlePickHistory,
+                    onClearHistory: { history.clear() },
+                    onShowAccount: { isAccountPresented = true },
+                    onPickStyle: handlePickStyle
+                )
+                .padding(.horizontal, Spacing.lg)
+                .padding(.top, Spacing.sm)
+                .padding(.bottom, Spacing.sm)
 
-    private var sidebar: some View {
-        List(selection: $selection) {
-            Section {
-                Label("New stencil", systemImage: "wand.and.sparkles")
-                    .tag(SidebarItem.newStencil)
-                Label("Settings", systemImage: "gearshape")
-                    .tag(SidebarItem.settings)
-            } header: {
-                Text("Workspace")
-            }
-
-            if !history.entries.isEmpty {
-                Section {
-                    ForEach(history.entries.prefix(8)) { entry in
-                        HistoryRow(entry: entry) {
-                            editorViewModel.apply(history: entry)
-                            selection = .newStencil
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                history.remove(id: entry.id)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        }
-                    }
-
-                    Button(role: .destructive) {
-                        history.clear()
-                    } label: {
-                        Label("Clear history", systemImage: "trash")
-                    }
-                    .font(.footnote)
-                    .foregroundStyle(AppColor.danger)
-                } header: {
-                    Text("Recent")
-                }
+                content
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .listStyle(.sidebar)
+        .tint(AppColor.accent)
+        .sheet(isPresented: $isAccountPresented) {
+            AccountSheet()
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+        // If the user lands on a result-only section without a result yet,
+        // snap back to Generate so the empty state isn't surprising.
+        .onChange(of: selectedSection) { _, newSection in
+            if newSection.requiresResult, editorViewModel.retouchViewModel == nil {
+                selectedSection = .generate
+            }
+        }
     }
 
-    // MARK: - Detail
+    // MARK: - Content router
 
     @ViewBuilder
-    private var detail: some View {
-        switch selection {
-        case .newStencil, .none:
-            EditorContainerView(viewModel: editorViewModel)
-        case .settings:
-            NavigationStack {
-                SettingsView()
-                    .navigationTitle("Settings")
-                    .navigationBarTitleDisplayMode(.large)
+    private var content: some View {
+        switch selectedSection {
+        case .generate:
+            EditorContainerView(
+                viewModel: editorViewModel,
+                onSwitchTo: { selectedSection = $0 }
+            )
+
+        case .refine:
+            if let retouchViewModel = editorViewModel.retouchViewModel {
+                RefinePanel(viewModel: retouchViewModel)
+                    .padding(Spacing.xl)
+            } else {
+                ResultRequiredView { selectedSection = .generate }
+            }
+
+        case .annotate:
+            if let retouchViewModel = editorViewModel.retouchViewModel {
+                AnnotationPanel(viewModel: retouchViewModel)
+                    .padding(Spacing.xl)
+            } else {
+                ResultRequiredView { selectedSection = .generate }
+            }
+
+        case .export:
+            if let retouchViewModel = editorViewModel.retouchViewModel,
+               case let .result(response, _) = editorViewModel.phase {
+                ExportPanel(viewModel: retouchViewModel, response: response)
+                    .padding(Spacing.xl)
+            } else {
+                ResultRequiredView { selectedSection = .generate }
             }
         }
+    }
+
+    // MARK: - Actions
+
+    private func handleNew() {
+        editorViewModel.startOver()
+        selectedSection = .generate
+    }
+
+    private func handlePickHistory(_ entry: GenerationHistoryEntry) {
+        editorViewModel.apply(history: entry)
+        selectedSection = .generate
+    }
+
+    private func handlePickStyle(_ style: StyleName) {
+        editorViewModel.parameters.estilo = style
+        selectedSection = .generate
     }
 }
 
-// MARK: - History row
+// MARK: - Empty state when a result-only section is visited without a result
 
-private struct HistoryRow: View {
-    let entry: GenerationHistoryEntry
-    let onTap: () -> Void
+private struct ResultRequiredView: View {
+    var onGenerate: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 6) {
-                    Image(systemName: entry.tier == .nano ? "cpu" : "sparkles")
-                        .font(.caption)
-                        .foregroundStyle(AppColor.accent)
-                    Text(entry.tier.displayName)
-                        .font(.subheadline.weight(.medium))
-                    Spacer()
-                    Text(Self.timeFormatter.string(from: entry.createdAt))
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                }
-                Text(entry.subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+        VStack(spacing: Spacing.lg) {
+            Image(systemName: "wand.and.stars")
+                .font(.system(size: 44, weight: .light))
+                .foregroundStyle(AppColor.accent)
+            Text("Generate a stencil first")
+                .font(.title3.weight(.semibold))
+            Text("Pick a reference photo and tap Generate. This section becomes available once a stencil exists.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: 380)
+            Button {
+                onGenerate()
+            } label: {
+                Label("Go to Generate", systemImage: "arrow.right")
+                    .padding(.horizontal, Spacing.lg)
+                    .padding(.vertical, Spacing.sm)
             }
-            .contentShape(Rectangle())
+            .liquidGlassButton(.prominent)
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(Spacing.xl)
     }
-
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
-        return formatter
-    }()
 }
 
 #Preview("iPad", traits: .landscapeLeft) {
     RootView()
-        .tint(AppColor.accent)
 }

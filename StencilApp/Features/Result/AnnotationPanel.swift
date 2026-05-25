@@ -2,9 +2,8 @@ import PencilKit
 import SwiftUI
 import UIKit
 
-/// Draw on top of the retouched stencil with Apple Pencil (or finger). The
-/// PKCanvasView is overlaid on the same `GlassImagePreview` frame used by the
-/// other tabs so zoom + pan still feel consistent.
+/// Three-column annotation workspace. Layers list on the left, full-bleed
+/// canvas in the middle, controls on the right. Reuses `AnnotationCanvas`.
 struct AnnotationPanel: View {
     @Bindable var viewModel: RetouchViewModel
     @State private var shareItem: ShareItem?
@@ -12,14 +11,65 @@ struct AnnotationPanel: View {
     @State private var isToolPickerVisible: Bool = true
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.xl) {
-            canvas
-            controls
-            informationCard
+        ViewThatFits(in: .horizontal) {
+            wideLayout
+            stackedLayout
         }
         .sheet(item: $shareItem) { item in
             ShareSheet(items: [item.url])
         }
+    }
+
+    // MARK: - Wide (iPad)
+
+    private var wideLayout: some View {
+        HStack(alignment: .top, spacing: Spacing.xl) {
+            layersColumn
+                .frame(width: 160)
+            canvas
+                .frame(maxWidth: .infinity)
+            controlsColumn
+                .frame(width: 260)
+        }
+    }
+
+    // MARK: - Stacked (iPhone)
+
+    private var stackedLayout: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: Spacing.xl) {
+                layersColumn
+                canvas
+                    .frame(height: 480)
+                controlsColumn
+            }
+        }
+    }
+
+    // MARK: - Layers
+
+    private var layersColumn: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            SectionLabel(text: "Layers")
+            VStack(spacing: Spacing.sm) {
+                layerChip(name: "Pencil strokes", icon: "scribble.variable", muted: false)
+                layerChip(name: "Stencil base",   icon: "rectangle.grid.1x2", muted: true)
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func layerChip(name: String, icon: String, muted: Bool) -> some View {
+        HStack(spacing: Spacing.sm) {
+            Image(systemName: icon)
+                .foregroundStyle(muted ? .secondary : AppColor.accent)
+            Text(name)
+                .font(AppFont.bodyEmphasis)
+            Spacer()
+        }
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .liquidGlassChip(tint: muted ? nil : AppColor.accent, prominent: !muted)
     }
 
     // MARK: - Canvas
@@ -46,84 +96,68 @@ struct AnnotationPanel: View {
             .padding(Spacing.md)
             .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 480)
+        .frame(minHeight: 560)
         .liquidGlassCard()
     }
 
     // MARK: - Controls
 
-    private var controls: some View {
-        VStack(alignment: .leading, spacing: Spacing.md) {
-            SectionLabel(text: "Annotation")
-
+    private var controlsColumn: some View {
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            SectionLabel(text: "Pencil")
             VStack(spacing: Spacing.md) {
                 Toggle(isOn: $viewModel.pencilOnlyDrawing) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Apple Pencil only")
                             .font(AppFont.bodyEmphasis)
-                        Text("Ignores finger input so you can rest your hand on the screen.")
+                        Text("Ignores finger input.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .tint(AppColor.accent)
-
                 Toggle(isOn: $isToolPickerVisible) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Show tool picker")
                             .font(AppFont.bodyEmphasis)
-                        Text("PencilKit's ink / marker / eraser palette.")
+                        Text("Ink, marker, eraser.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
-                .tint(AppColor.accent)
-
-                Divider()
-
-                HStack(spacing: Spacing.md) {
-                    Button(role: .destructive) {
-                        viewModel.clearAnnotation()
-                    } label: {
-                        Label("Clear strokes", systemImage: "trash")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .liquidGlassButton(.subtle)
-                    .disabled(viewModel.annotationDrawing.bounds.isEmpty)
-
-                    Button {
-                        shareAnnotated()
-                    } label: {
-                        Label("Share annotated", systemImage: "square.and.arrow.up")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .liquidGlassButton(.prominent)
-                    .disabled(viewModel.stencilImage == nil)
-                }
-
-                if let saveMessage {
-                    Text(saveMessage)
-                        .font(.footnote)
-                        .foregroundStyle(
-                            saveMessage.lowercased().contains("error") ? AppColor.danger : .secondary
-                        )
-                }
             }
+            .tint(AppColor.accent)
             .padding(Spacing.lg)
             .liquidGlassCard()
-        }
-    }
 
-    private var informationCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            SectionLabel(text: "Tip")
-            Text("Use the system tool picker to swap inks, sizes, or grab the eraser. Strokes are layered above the retouched stencil and only baked in when you export.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .padding(Spacing.lg)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .liquidGlassCard(cornerRadius: Radius.md)
+            VStack(spacing: Spacing.sm) {
+                Button(role: .destructive) {
+                    viewModel.clearAnnotation()
+                } label: {
+                    Label("Clear strokes", systemImage: "trash")
+                        .frame(maxWidth: .infinity)
+                }
+                .liquidGlassButton(.subtle)
+                .disabled(viewModel.annotationDrawing.bounds.isEmpty)
+
+                Button {
+                    shareAnnotated()
+                } label: {
+                    Label("Share annotated", systemImage: "square.and.arrow.up")
+                        .frame(maxWidth: .infinity)
+                }
+                .liquidGlassButton(.prominent)
+                .disabled(viewModel.stencilImage == nil)
+            }
+
+            if let saveMessage {
+                Text(saveMessage)
+                    .font(.footnote)
+                    .foregroundStyle(
+                        saveMessage.lowercased().contains("error") ? AppColor.danger : .secondary
+                    )
+            }
+
+            Spacer(minLength: 0)
         }
     }
 
@@ -147,7 +181,7 @@ struct AnnotationPanel: View {
     }
 }
 
-// MARK: - Share sheet plumbing (file-local copies to avoid cross-file coupling)
+// MARK: - Share sheet plumbing (file-local)
 
 private struct ShareItem: Identifiable {
     let id = UUID()
