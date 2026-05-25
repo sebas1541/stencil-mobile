@@ -35,106 +35,93 @@ struct EditorContainerView: View {
 
 // MARK: - Generating
 
-/// Loading state with rotating tattoo-themed verbs + animated dots. Same
-/// vibe as Claude Code's status indicators but tuned for what the stencil
-/// pipeline is actually doing under the hood.
+/// Loading state: a single lowercase verb that rotates every 1.6 s with three
+/// animated dots filling in beside it. Same lineage as Claude Code's
+/// "polishing… philosophizing… brewing…" status line.
 private struct GeneratingView: View {
-    /// Verbs rotate every 1.8 s. List intentionally walks the pipeline in
-    /// rough order so the user gets a sense of progress even though we
-    /// don't get real progress events back from the server.
+    /// Lowercase whimsical -ing verbs. A few are genuine stencil-pipeline
+    /// stages, the rest are pure Claude-Code-style flavour.
     private static let verbs: [String] = [
-        "Studying the reference",
-        "Classifying the subject",
-        "Sketching base lines",
-        "Tracing contours",
-        "Inking the silhouette",
-        "Carving out shadows",
-        "Cleaning up speckles",
-        "Refining edges",
-        "Polishing the stencil",
-        "Almost there",
+        "thinking",
+        "studying",
+        "sketching",
+        "tracing",
+        "inking",
+        "shading",
+        "contouring",
+        "stippling",
+        "polishing",
+        "refining",
+        "philosophizing",
+        "pondering",
+        "brewing",
+        "marinating",
+        "conjuring",
+        "transmuting",
+        "channeling",
+        "crafting",
+        "rendering",
+        "almost there",
     ]
 
     @State private var verbIndex: Int = 0
 
     var body: some View {
-        VStack(spacing: Spacing.xl) {
-            icon
-            verb
-            AnimatedDots()
-            Text("This usually takes 4–10 seconds depending on the tier.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.top, Spacing.sm)
-        }
-        .padding(.horizontal, Spacing.xxl)
-        .padding(.vertical, Spacing.xxl)
-        .frame(maxWidth: 520)
-        .liquidGlassCard()
-        .padding(Spacing.xl)
-        .task {
-            // Cycle the verb until the view disappears.
-            while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 1_800_000_000)
-                if Task.isCancelled { break }
-                withAnimation(.smooth(duration: 0.45)) {
-                    verbIndex = (verbIndex + 1) % Self.verbs.count
+        // Whole card is JUST the verb + its dots. No icon, no subtitle, no
+        // duration hint — matches the user's "cleaner please" ask.
+        VerbWithDots(verb: Self.verbs[verbIndex])
+            .id(verbIndex) // restart the dot animation on each verb swap
+            .contentTransition(.opacity)
+            .padding(.horizontal, Spacing.xxl)
+            .padding(.vertical, Spacing.xxl)
+            .frame(maxWidth: 520)
+            .liquidGlassCard()
+            .padding(Spacing.xl)
+            .task {
+                while !Task.isCancelled {
+                    try? await Task.sleep(nanoseconds: 1_600_000_000)
+                    if Task.isCancelled { break }
+                    withAnimation(.smooth(duration: 0.40)) {
+                        verbIndex = (verbIndex + 1) % Self.verbs.count
+                    }
                 }
             }
-        }
-    }
-
-    private var icon: some View {
-        Image(systemName: "wand.and.stars")
-            .font(.system(size: 56, weight: .light))
-            .foregroundStyle(AppColor.accent)
-            .symbolEffect(.variableColor.iterative, options: .repeating)
-            .padding(Spacing.lg)
-            .background(
-                Circle()
-                    .fill(AppColor.accent.opacity(0.10))
-            )
-    }
-
-    private var verb: some View {
-        Text(Self.verbs[verbIndex])
-            .font(.system(size: 26, weight: .semibold, design: .rounded))
-            .foregroundStyle(.primary)
-            .multilineTextAlignment(.center)
-            .contentTransition(.opacity)
-            .frame(minHeight: 36)
-            .id(verbIndex) // forces a fresh transition per verb
-            .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 }
 
-/// Three indigo dots, the active one larger + fully opaque, sweeping every
-/// 0.35 s. Pure SwiftUI, no timers leaking outside the view's task.
-private struct AnimatedDots: View {
-    private let count: Int = 3
-    @State private var active: Int = 0
+/// `<verb>` followed by three dots that fade in one-at-a-time on a
+/// ~0.35 s cadence, then all reset. Lowercase, monospaced-digit-safe,
+/// no shift in layout because the dot positions are reserved.
+private struct VerbWithDots: View {
+    let verb: String
+    @State private var dotCount: Int = 0
 
     var body: some View {
-        HStack(spacing: 10) {
-            ForEach(0..<count, id: \.self) { i in
-                Circle()
-                    .fill(AppColor.accent)
-                    .frame(width: 10, height: 10)
-                    .opacity(i == active ? 1.0 : 0.30)
-                    .scaleEffect(i == active ? 1.25 : 1.0)
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
+            Text(verb)
+                .font(.system(size: 32, weight: .medium, design: .rounded))
+                .foregroundStyle(.primary)
+
+            // Three dots positioned in a fixed-width slot so the verb stays
+            // exactly where it is regardless of how many dots are showing.
+            ZStack(alignment: .leading) {
+                Text("...")
+                    .opacity(0)   // reserves space
+                Text(String(repeating: ".", count: dotCount))
             }
+            .font(.system(size: 32, weight: .medium, design: .rounded))
+            .foregroundStyle(AppColor.accent)
         }
         .task {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 350_000_000)
                 if Task.isCancelled { break }
-                withAnimation(.smooth(duration: 0.30)) {
-                    active = (active + 1) % count
+                withAnimation(.smooth(duration: 0.25)) {
+                    dotCount = (dotCount + 1) % 4
                 }
             }
         }
-        .accessibilityLabel("Loading")
+        .accessibilityLabel(verb)
     }
 }
 
