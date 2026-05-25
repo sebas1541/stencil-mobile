@@ -113,10 +113,10 @@ struct TopToolbar: View {
             .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
-        .background {
-            Capsule(style: .continuous)
-                .fill(AppColor.accent)
-        }
+        // Real Liquid Glass tinted with the accent — primary-action chip,
+        // not a flat solid pill. This is how Apple Music's "Add" / Calendar's
+        // "+" buttons read on iPadOS 26.
+        .liquidGlassNavigationSurface(.capsule, tint: AppColor.accent)
         .accessibilityLabel("New stencil")
     }
 

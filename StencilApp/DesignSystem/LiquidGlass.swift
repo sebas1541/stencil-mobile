@@ -52,48 +52,64 @@ extension View {
 
 // MARK: - Navigation-layer Liquid Glass surface
 
-/// Use this for surfaces that genuinely belong in Apple's navigation
-/// layer — top toolbar background, sidebar background, floating action
-/// chips that overlay scrolling content.
+/// Use this for surfaces that belong in Apple's navigation layer — top
+/// toolbar chips, sidebar background, floating action chips that overlay
+/// scrolling content.
+///
+/// Implementation note: on iPadOS 26 we apply `.glassEffect()` DIRECTLY to
+/// the content view (the Apple-correct API), NOT as a `background { ... }`
+/// with a `.fill(.clear)` shape. Earlier versions did the latter and
+/// SwiftUI optimised the empty fill away, which is why the glass was
+/// rendering invisibly on the toolbar chips.
 struct LiquidGlassNavigationSurface: ViewModifier {
-    let shape: ContainerShape
-
     enum ContainerShape {
         case capsule
         case rect(cornerRadius: CGFloat)
     }
 
+    let shape: ContainerShape
+    let tint: Color?
+
     func body(content: Content) -> some View {
-        content.background {
-            navigationBackground
+        if #available(iOS 26.0, *) {
+            applyGlass(to: content)
+        } else {
+            applyFallback(to: content)
+        }
+    }
+
+    @available(iOS 26.0, *)
+    @ViewBuilder
+    private func applyGlass(to content: Content) -> some View {
+        let glass: Glass = tint.map { Glass.regular.tint($0) } ?? .regular
+
+        switch shape {
+        case .capsule:
+            content.glassEffect(glass, in: .capsule)
+        case let .rect(cornerRadius):
+            content.glassEffect(glass, in: .rect(cornerRadius: cornerRadius))
         }
     }
 
     @ViewBuilder
-    private var navigationBackground: some View {
-        if #available(iOS 26.0, *) {
-            switch shape {
-            case .capsule:
+    private func applyFallback(to content: Content) -> some View {
+        let fill: AnyShapeStyle = tint
+            .map { AnyShapeStyle($0.opacity(0.88)) }
+            ?? AnyShapeStyle(.ultraThinMaterial)
+        switch shape {
+        case .capsule:
+            content.background {
                 Capsule(style: .continuous)
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .capsule)
-            case let .rect(cornerRadius):
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(.clear)
-                    .glassEffect(.regular, in: .rect(cornerRadius: cornerRadius))
-            }
-        } else {
-            switch shape {
-            case .capsule:
-                Capsule(style: .continuous)
-                    .fill(.ultraThinMaterial)
+                    .fill(fill)
                     .overlay(
                         Capsule(style: .continuous)
                             .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
                     )
-            case let .rect(cornerRadius):
+            }
+        case let .rect(cornerRadius):
+            content.background {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(.ultraThinMaterial)
+                    .fill(fill)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .strokeBorder(.white.opacity(0.18), lineWidth: 0.5)
@@ -104,8 +120,15 @@ struct LiquidGlassNavigationSurface: ViewModifier {
 }
 
 extension View {
-    func liquidGlassNavigationSurface(_ shape: LiquidGlassNavigationSurface.ContainerShape) -> some View {
-        modifier(LiquidGlassNavigationSurface(shape: shape))
+    /// Apply navigation-layer Liquid Glass to a view (toolbar chip / floating
+    /// action). Pass `tint:` to give the glass a coloured wash — e.g.
+    /// `.liquidGlassNavigationSurface(.capsule, tint: AppColor.accent)` for
+    /// the primary "New" button.
+    func liquidGlassNavigationSurface(
+        _ shape: LiquidGlassNavigationSurface.ContainerShape,
+        tint: Color? = nil
+    ) -> some View {
+        modifier(LiquidGlassNavigationSurface(shape: shape, tint: tint))
     }
 }
 
